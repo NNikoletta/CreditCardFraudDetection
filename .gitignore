@@ -13,3 +13,10 @@ __pycache__/
 Thumbs.db
 
 .ipynb_checkpoints/
+
+.env
+kaggle.json
+data/raw/
+data/processed/
+models/
+outputs/
