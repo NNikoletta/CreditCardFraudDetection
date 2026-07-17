@@ -26,12 +26,10 @@ def prepare_data(x, y):
     valid_label = to_categorical(valid_label)
     test_label = to_categorical(test_label)
 
-    # print(x_train.shape)
-    # print(train_label.shape)
+    # print(train_label[0])
     # print(x_valid.shape)
     # print(valid_label.shape)
     # print(x_test.shape)
     # print(test_label.shape)
 
     return x_train, x_valid, x_test, train_label, valid_label, test_label
-
