@@ -4,12 +4,8 @@ from keras.activations import relu, softmax
 from keras.layers import Dense
 from keras.layers import Conv1D, MaxPooling1D
 from keras.layers import Flatten
-
-
-custom_weights = {
-    0: 1.0,
-    1: 578.88
-}
+import numpy as np
+from sklearn.utils.class_weight import compute_class_weight
 
 
 class Network:
@@ -23,6 +19,9 @@ class Network:
         pass
 
     def train(self, x_train, train_label, x_valid, valid_label):
+        train_classes = np.argmax(train_label, axis=1)
+        custom_weights = dict(enumerate(compute_class_weight(class_weight='balanced', classes=np.unique(train_classes),
+                                                             y=train_classes)))  # custom weights are calculated based on the distribution of the training labels
         self.model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),
                            metrics=['accuracy'])
         self.model.summary()
@@ -42,8 +41,8 @@ class Network:
         return predicted_classes
 
 
-class TestCNN(Network):
-    def __init__(self, batch_size=32, ep=5):
+class PipelineTestModel(Network):  # TEMPORARY model that is used only to validate the end-to-end pipeline
+    def __init__(self, batch_size=32, ep=5):  # Not intended for true fraud detection
         super().__init__(batch_size, ep)
 
     def build_model(self):
