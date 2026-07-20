@@ -1,7 +1,13 @@
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+from dataclasses import dataclass
 
+
+@dataclass(frozen=True)
+class TrainingConfig:
+    batch_size: int = 16
+    epochs: int = 5
 
 load_dotenv()
 

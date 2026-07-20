@@ -1,6 +1,7 @@
 from src.config import raw_data_dir, kaggle_dataset
 from kaggle.api.kaggle_api_extended import KaggleApi
 from src.utils import ensure_dir
+from pathlib import Path
 import pandas as pd
 import numpy as np
 
@@ -9,7 +10,7 @@ raw_data_file = 'creditcard.csv'
 
 def download_dataset():
     ensure_dir(raw_data_dir)  # this ensures that the directory for the data exists
-    if raw_data_dir.is_dir() and any(raw_data_dir.iterdir()):  # if directory exists AND it's not empty
+    if Path(raw_data_dir/raw_data_file).is_file():  # if directory exists AND has the correct file
         print("Dataset already exists.")  # assume that raw data exists
     else:  # otherwise
         api = KaggleApi()
@@ -20,8 +21,8 @@ def download_dataset():
 
 
 def load_dataset():
-    df_tmp = pd.read_csv(raw_data_dir/raw_data_file, header=0, usecols=lambda column: column != 0)
-    df = df_tmp.to_numpy()
-    x = df[:, range(1, 30)]
-    y = df[:, 30].astype(int)
+    df_tmp = pd.read_csv(raw_data_dir/raw_data_file)
+    x = df_tmp.drop(columns=["Time", "Class"]).to_numpy(dtype=np.float64)
+    y = df_tmp["Class"].to_numpy(dtype=np.int32)
+
     return x, y

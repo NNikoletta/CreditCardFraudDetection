@@ -5,12 +5,13 @@ from keras.layers import Dense
 from keras.layers import Conv1D, MaxPooling1D, AvgPool1D
 from keras.layers import Flatten
 from sklearn.utils.class_weight import compute_class_weight
+from src.config import TrainingConfig
 
 
 class Network:
-    def __init__(self, batch_size=16, ep=10):
-        self.batch_size = batch_size
-        self.ep = ep
+    def __init__(self):
+        self.batch_size = TrainingConfig.batch_size
+        self.ep = TrainingConfig.epochs
         self.model = keras.Sequential()
         self.build_model()
 
@@ -39,14 +40,14 @@ class Network:
         return test_loss, test_acc
 
     def predict(self, x_test):
-        predicted_classes = self.model.predict(x_test)
-        predicted_classes = np.argmax(np.round(predicted_classes), axis=1)
+        predicted_probabilities = self.model.predict(x_test)
+        predicted_classes = np.argmax(predicted_probabilities, axis=1)
         return predicted_classes
 
 
 class PipelineTestModel(Network):  # TEMPORARY model that is used only to validate the end-to-end pipeline
-    def __init__(self, batch_size=32, ep=20):  # Not intended for true fraud detection
-        super().__init__(batch_size, ep)
+    def __init__(self):  # Not intended for true fraud detection
+        super().__init__()
 
     def build_model(self):
         self.model = keras.Sequential([
