@@ -8,9 +8,9 @@ def prepare_data(x, y):  # Preparation of data for processing
     x_train, x_valid, train_label, valid_label = ms.train_test_split(x_train, train_label, test_size=0.2, random_state=0)
 
     scaler = StandardScaler()
-    scaler.fit_transform(x_train)
-    scaler.transform(x_valid)
-    scaler.transform(x_test)
+    x_train = scaler.fit_transform(x_train)
+    x_valid = scaler.transform(x_valid)
+    x_test = scaler.transform(x_test)
 
     x_train = x_train.reshape(x_train.shape[0], x_train.shape[1], 1)
     x_valid = x_valid.reshape(x_valid.shape[0], x_valid.shape[1], 1)

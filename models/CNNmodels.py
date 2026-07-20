@@ -4,7 +4,6 @@ from keras.activations import relu, softmax
 from keras.layers import Dense
 from keras.layers import Conv1D, MaxPooling1D
 from keras.layers import Flatten
-import numpy as np
 from sklearn.utils.class_weight import compute_class_weight
 
 
