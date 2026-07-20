@@ -20,8 +20,12 @@ class Network:
 
     def train(self, x_train, train_label, x_valid, valid_label):
         train_classes = np.argmax(train_label, axis=1)
-        custom_weights = dict(enumerate(compute_class_weight(class_weight='balanced', classes=np.unique(train_classes),
-                                                             y=train_classes)))  # custom weights are calculated based on the distribution of the training labels
+        classes = np.unique(train_classes)
+        weights = compute_class_weight(class_weight='balanced', classes=classes, y=train_classes)  # custom weights are calculated based on the distribution of the training labels
+        custom_weights = {
+            int(class_label): float(weight)
+            for class_label, weight in zip(classes, weights)
+        }
         self.model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),
                            metrics=['accuracy'])
         self.model.summary()
