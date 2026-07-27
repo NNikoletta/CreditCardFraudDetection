@@ -17,7 +17,7 @@ The dataset is originally stored in a .csv file that consists of 31 attributes:
 ### Preparing the data
 The dataset is first downloaded in a form of a .csv file. Before this however, the existence of the correct file path is checked. If the path exists, the pipeline checks the existence of the file, which is followed by data validation in case it already exists. This ensures that the data is not corrupted.
 
-If the file is not found or it is corrupted, the .csv is automatically downloaded.
+If the file is not found or it is corrupted, the code raises an error with an explanation that describes why we can not proceed with the processing of the data..
 
 The data is then loaded into two numpy arrays _x_ and _y_. The former contains all the features while the latter stores all the classes that belong to each entry.
 
