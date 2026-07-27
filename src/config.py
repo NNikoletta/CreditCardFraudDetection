@@ -8,6 +8,8 @@ from dataclasses import dataclass
 class TrainingConfig:
     batch_size: int = 16
     epochs: int = 5
+    raw_data_file = "creditcard.csv"
+
 
 load_dotenv()
 

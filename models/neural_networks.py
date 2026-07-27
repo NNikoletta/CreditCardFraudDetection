@@ -10,8 +10,9 @@ from src.config import TrainingConfig
 
 class Network:
     def __init__(self):
-        self.batch_size = TrainingConfig.batch_size
-        self.ep = TrainingConfig.epochs
+        config = TrainingConfig()
+        self.batch_size = config.batch_size
+        self.ep = config.epochs
         self.model = keras.Sequential()
         self.build_model()
 
