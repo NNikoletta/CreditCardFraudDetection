@@ -17,18 +17,18 @@ The dataset is originally stored in a .csv file that consists of 31 attributes:
 ### Data Acquisition
 The dataset is first downloaded in a form of a .csv file. Before this however, the existence of the correct file path is checked. If the path exists, the pipeline checks the existence of the file, which is followed by data validation in case it already exists. This ensures that the data is not corrupted.
 
-If the file is not found or it is corrupted, the code raises an error with an explanation that describes why we can not proceed with the processing of the data.
+If the file is not found, the file is downloaded and if it is corrupted, the code raises an error with an explanation that describes why we cannot proceed with the processing of the data.
 
-The part responsible for validating the data is located inside the _src_ folder in the _validate_data.py_ file. Some of the checks that the code performs are the following:
-1. Checks the existence of the file in the correct data path.
-2. Checks if the file contains anything at all by checking the size of the .csv.
-3. Checks if there are any data errors including any encoding or parsing errors.
-4. Checks if number of columns is correct.
-5. Checks if number of rows is correct.
-6. Checks is the column names match the expected column names.
-7. Checks if there are any empty cells (missing values).
-8. Checks if the number of fraudulent transactions is correct.
-9. Checks if the number of legitimate transactions is correct.
+The part responsible for validating the data is located inside the _src_ folder in the _validate_data.py_ file. The checks that the code performs are the following:
+1. Verifies the existence of the file in the correct data path.
+2. Verifies if the file contains anything at all by checking the size of the .csv.
+3. Verifies if there are any data errors including any encoding or parsing errors.
+4. Verifies if the number of columns is correct.
+5. Verifies if the number of rows is correct.
+6. Verifies if the column names match the expected column names.
+7. Verifies if there are any empty cells (missing values).
+8. Verifies if the number of fraudulent transactions is correct.
+9. Verifies if the number of legitimate transactions is correct.
 If the data passes every validation check, the code moves on to the next step.
 
 The data is then loaded into two numpy arrays _x_ and _y_. The former contains all the features while the latter stores all the classes that belong to each entry.
