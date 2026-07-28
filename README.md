@@ -19,8 +19,33 @@ The dataset is first downloaded in a form of a .csv file. Before this however, t
 
 If the file is not found or it is corrupted, the code raises an error with an explanation that describes why we can not proceed with the processing of the data.
 
+The part responsible for validating the data is located inside the _src_ folder in the _validate_data.py_ file. Some of the checks that the code performs are the following:
+1. Checks the existence of the file in the correct data path.
+2. Checks if the file contains anything at all by checking the size of the .csv.
+3. Checks if there are any data errors including any encoding or parsing errors.
+4. Checks if number of columns is correct.
+5. Checks if number of rows is correct.
+6. Checks is the column names match the expected column names.
+7. Checks if there are any empty cells (missing values).
+8. Checks if the number of fraudulent transactions is correct.
+9. Checks if the number of legitimate transactions is correct.
+If the data passes every validation check, the code moves on to the next step.
+
 The data is then loaded into two numpy arrays _x_ and _y_. The former contains all the features while the latter stores all the classes that belong to each entry.
 
 The _Time_ attribute is currently excluded from the data. This feature only represents the time elapsed from the very first transaction in seconds. Because the data source does not indicate what the exact relation is between the time of the experiment and the true time of the day, I am not able to reliably determine if a transaction was made during the day or night. Additionally, the data is not described as data coming from one subject only, which means that I am not able to separate any accounts to follow a shopping pattern where the _Time_ attribute would be valuable. Due to the reasons described above, I have decided to exlude the _Time_ column from this pipeline. Nevertheless, I am open to exploring the possibility of using this data in a future continuation of this project.
+
+A brief summary of the data acquisition pipeline is described below:
+1. The data acquisition is completely automated by using Kaggle API. The _config.py_ inside the _src_ folder is responsible for handling all the private information to automatically access the dataset through the Kaggle username and key, which is stored in the _.env_ file. An _.env.example_ file is provided to give a clear picture of the file tree and flow of information.
+2. The existence of the file path and the file itself is checked. The raw data is stored inside the project’s _data_ folder (./CreditCardFraudDetection/data/raw). If the folder does not exist, the code creates it.
+3. The dataset is dowloaded automatically if it does not exist.
+4. The validation of the data is performed.
+5. The dataset is loaded into the previously mentioned numpy arrays.
+
+### Normalization of the data
+
+
+
+
 
 
