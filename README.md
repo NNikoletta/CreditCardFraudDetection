@@ -4,7 +4,7 @@ This project focuses on a highly imbalanced credit card fraud detection dataset 
 
 ## A little bit about the data
 ### Data Source and Structure
-The dataset contains credit card transactions made in Europe in September 2013. The dataset is extremely imbalanced with 492 fraudulent and 284,315 regular transactions. The project aims to create an end-to-end model that loads and processes the data before completing the detection which is followed by visualization of the choices the neural network made as well as the evaluation of the results.
+The dataset contains credit card transactions made in Europe in September 2013. The dataset is extremely imbalanced with 492 fraudulent and 284,315 legitimate transactions. The project aims to create an end-to-end model that automatically downloads, loads and processes the data before completing the classification task at hand which is the detection of fraudulent transactions. This is followed by the visualization and the evaluation of the results.
 
 The dataset is originally stored in a .csv file that consists of 31 attributes:
 - Time - the time elapsed from the first transaction in seconds
