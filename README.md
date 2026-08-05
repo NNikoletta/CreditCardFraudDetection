@@ -2,6 +2,10 @@
   
 This project focuses on a highly imbalanced credit card fraud detection dataset from Kaggle that contains credit card transactions made in September 2013. This is an end-to-end project utilizing deep learning.
 
+## Project Status
+
+Project is in its beginning stages with the current focus being on fine-tuning the existing code and researching the state-of-the-art methods.
+
 ## A little bit about the data
 ### Data Source and Structure
 The dataset contains credit card transactions made in Europe in September 2013. The dataset is extremely imbalanced with 492 fraudulent and 284,315 legitimate transactions. The project aims to create an end-to-end model that automatically downloads, loads and processes the data before completing the classification task at hand which is the detection of fraudulent transactions. This is followed by the visualization and the evaluation of the results.
@@ -35,7 +39,7 @@ The data is then loaded into two numpy arrays _x_ and _y_. The former contains a
 
 The _Time_ attribute is currently excluded from the data. This feature only represents the time elapsed from the very first transaction in seconds. Because the data source does not indicate what the exact relation is between the time of the experiment and the true time of the day, I am not able to reliably determine if a transaction was made during the day or night. Additionally, the data is not described as data coming from one subject only, which means that I am not able to separate any accounts to follow a shopping pattern where the _Time_ attribute would be valuable. Due to the reasons described above, I have decided to exlude the _Time_ column from this pipeline. Nevertheless, I am open to exploring the possibility of using this data in a future continuation of this project.
 
-A brief summary of the data acquisition pipeline is described below:
+**A brief summary of the data acquisition pipeline is described below:**
 1. The data acquisition is completely automated by using Kaggle API. The _config.py_ inside the _src_ folder is responsible for handling all the private information to automatically access the dataset through the Kaggle username and key, which is stored in the _.env_ file. An _.env.example_ file is provided to give a clear picture of the file tree and flow of information.
 2. The existence of the file path and the file itself is checked. The raw data is stored inside the project’s _data_ folder (./CreditCardFraudDetection/data/raw). If the folder does not exist, the code creates it.
 3. The dataset is dowloaded automatically if it does not exist.
