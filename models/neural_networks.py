@@ -1,8 +1,9 @@
 import numpy as np
 import keras
 from keras.activations import relu, softmax
-from keras.layers import Dense, Input
-from keras.layers import Conv1D, MaxPooling1D, AvgPool1D
+from keras.models import Model
+from keras.layers import Dense, Input, Reshape
+from keras.layers import Conv1D, MaxPooling1D, AvgPool1D, BatchNormalization
 from keras.layers import Flatten
 from sklearn.utils.class_weight import compute_class_weight
 
@@ -54,10 +55,24 @@ class PipelineTestModel(Network):  # TEMPORARY model that is used only to valida
     def build_model(self):
         self.model = keras.Sequential([
             Input(shape=(29, 1)),
-            Conv1D(16, kernel_size=2, strides=1, padding='same', activation=relu),
-            AvgPool1D(pool_size=2, padding='valid'),
+            Conv1D(32, kernel_size=2, strides=1, padding='same', activation=relu),
+            AvgPool1D(pool_size=2, strides=2, padding='valid'),
             Flatten(),
             Dense(40, activation=relu),
             Dense(2, activation=softmax)
         ])
 
+class CNN(Network):
+    def __init__(self):
+        super().__init__()
+
+    def build_model(self):
+        input_main = Input(shape=(29,))
+        x = Reshape((29, 1))(input_main)
+        x = Conv1D(8, kernel_size=2, strides=2, padding='same', activation=relu, input_shape=(29, 1))(x)
+        x = Flatten()(x)
+        x = Dense(40, activation=relu)(x)
+        softmax_out = Dense(2, activation=softmax)(x)
+
+        self.model = Model(inputs=input_main, outputs=softmax_out)
+        return self.model
