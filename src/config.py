@@ -9,6 +9,9 @@ class TrainingConfig:
     batch_size: int = 16
     epochs: int = 5
 
+@dataclass(frozen=True)
+class XGBoostConfig:
+    learning_rate: float = 0.1
 
 @dataclass(frozen=True)
 class DataValidationConfig:

@@ -3,8 +3,9 @@ import keras
 from keras.activations import relu, softmax
 from keras.models import Model
 from keras.layers import Dense, Input, Reshape
-from keras.layers import Conv1D, MaxPooling1D, AvgPool1D, BatchNormalization
+from keras.layers import Conv1D, AvgPool1D
 from keras.layers import Flatten
+from keras.utils import to_categorical
 from sklearn.utils.class_weight import compute_class_weight
 
 from src.config import TrainingConfig
@@ -14,17 +15,18 @@ class Network:
     def __init__(self):
         config = TrainingConfig()
         self.batch_size = config.batch_size
-        self.ep = config.epochs
+        self.epochs = config.epochs
         self.model = keras.Sequential()
         self.build_model()
 
     def build_model(self):
         pass
 
-    def train(self, x_train, train_label, x_valid, valid_label):
-        train_classes = np.argmax(train_label, axis=1)
-        classes = np.unique(train_classes)
-        weights = compute_class_weight(class_weight='balanced', classes=classes, y=train_classes)  # custom weights are calculated based on the distribution of the training labels
+    def train(self, x_train, y_train, x_valid, y_valid):
+        train_label = to_categorical(y_train)
+        valid_label = to_categorical(y_valid)
+        classes = np.unique(y_train)
+        weights = compute_class_weight(class_weight='balanced', classes=classes, y=y_train)  # custom weights are calculated based on the distribution of the training labels
         custom_weights = {
             int(class_label): float(weight)
             for class_label, weight in zip(classes, weights)
@@ -33,10 +35,11 @@ class Network:
                            metrics=['accuracy'])
         self.model.summary()
         history = self.model.fit(x_train, train_label, class_weight=custom_weights, batch_size=self.batch_size,
-                                 epochs=self.ep, verbose=1, validation_data=(x_valid, valid_label))
+                                 epochs=self.epochs, verbose=1, validation_data=(x_valid, valid_label))
         return history
 
-    def evaluate(self, x_test, test_label):
+    def evaluate(self, x_test, y_test):
+        test_label = to_categorical(y_test)
         test_loss, test_acc = self.model.evaluate(x_test, test_label, verbose=1)
         print('Test loss: ', test_loss)
         print('Test accuracy: ', test_acc)
@@ -61,6 +64,7 @@ class PipelineTestModel(Network):  # TEMPORARY model that is used only to valida
             Dense(40, activation=relu),
             Dense(2, activation=softmax)
         ])
+
 
 class CNN(Network):
     def __init__(self):
