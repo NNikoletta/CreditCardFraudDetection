@@ -8,7 +8,7 @@ Project is in its beginning stages with the current focus being on fine-tuning t
 
 ## A little bit about the data
 ### Data Source and Structure
-The dataset contains credit card transactions made in Europe in September 2013. The dataset is extremely imbalanced with 492 fraudulent and 284,315 legitimate transactions. The project aims to create an end-to-end model that automatically downloads, loads and processes the data before completing the classification task at hand which is the detection of fraudulent transactions. This is followed by the visualization and the evaluation of the results.
+The dataset contains credit card transactions made in Europe in September 2013. The dataset is extremely imbalanced with 492 fraudulent and 284,315 legitimate transactions (fraudulent transactions amount to ~0.172% of all data). The project aims to create an end-to-end model that automatically downloads, loads and processes the data before completing the classification task at hand which is the detection of fraudulent transactions. This is followed by the evaluation and visualization of the results.
 
 The dataset is originally stored in a .csv file that consists of 31 attributes:
 - Time - the time elapsed from the first transaction in seconds
@@ -39,6 +39,16 @@ The data is then loaded into two numpy arrays _x_ and _y_. The former contains a
 
 The _Time_ attribute is currently excluded from the data. This feature only represents the time elapsed from the very first transaction in seconds. Because the data source does not indicate what the exact relation is between the time of the experiment and the true time of the day, I am not able to reliably determine if a transaction was made during the day or night. Additionally, the data is not described as data coming from one subject only, which means that I am not able to separate any accounts to follow a shopping pattern where the _Time_ attribute would be valuable. Due to the reasons described above, I have decided to exlude the _Time_ column from this pipeline. Nevertheless, I am open to exploring the possibility of using this data in a future continuation of this project.
 
+### Normalization of the data
+
+After the creation of the two previously mentioned numpy arrays that store the data (_x_, _y_), the focus falls on normalization. Because the project's main tools are neural networks, the data needs to be centred around zero to achieve the best training results. The _mean_ and _std_ of a few attributes were checked before proceeding with any modifications. Because the results of Principal Component Analysis (PCA) are very often already normalized, in certain cases there is no need for another normalization, however, in this scenario, the _std_ is varying. To fix this, _scikit-learn's_ _StandardScaler()_ is used after the data is separated into the _train_, _test_, and _validate_ sets in the ratio of ~80/10/10 respectively. The scaler is only fit on the training data to ensure that there is no data leakage and the performance of the model closely reflects the results it would show in a real life scenerio.
+
+
+
+
+
+
+
 **A brief summary of the data acquisition pipeline is described below:**
 1. The data acquisition is completely automated by using Kaggle API. The _config.py_ inside the _src_ folder is responsible for handling all the private information to automatically access the dataset through the Kaggle username and key, which is stored in the _.env_ file. An _.env.example_ file is provided to give a clear picture of the file tree and flow of information.
 2. The existence of the file path and the file itself is checked. The raw data is stored inside the project’s _data_ folder (./CreditCardFraudDetection/data/raw). If the folder does not exist, the code creates it.
@@ -46,7 +56,6 @@ The _Time_ attribute is currently excluded from the data. This feature only repr
 4. The validation of the data is performed.
 5. The dataset is loaded into the previously mentioned numpy arrays.
 
-### Normalization of the data
 
 
 
