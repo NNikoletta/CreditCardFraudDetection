@@ -3,7 +3,7 @@ import keras
 from keras.activations import relu, softmax
 from keras.models import Model
 from keras.layers import Dense, Input, Reshape
-from keras.layers import Conv1D, AvgPool1D
+from keras.layers import Conv1D, AvgPool1D, Dropout, Concatenate
 from keras.layers import Flatten
 from keras.utils import to_categorical
 from sklearn.utils.class_weight import compute_class_weight
@@ -32,7 +32,7 @@ class Network:
             for class_label, weight in zip(classes, weights)
         }
         self.model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),
-                           metrics=['accuracy'])
+                           metrics=['accuracy', 'auc', 'f1_score'])
         self.model.summary()
         history = self.model.fit(x_train, train_label, class_weight=custom_weights, batch_size=self.batch_size,
                                  epochs=self.epochs, verbose=1, validation_data=(x_valid, valid_label))
@@ -40,9 +40,10 @@ class Network:
 
     def evaluate(self, x_test, y_test):
         test_label = to_categorical(y_test)
-        test_loss, test_acc = self.model.evaluate(x_test, test_label, verbose=1)
+        test_loss, test_acc, auc, _ = self.model.evaluate(x_test, test_label, verbose=1)
         print('Test loss: ', test_loss)
         print('Test accuracy: ', test_acc)
+        print('AUC: ', auc)
         return test_loss, test_acc
 
     def predict(self, x_test):
@@ -72,11 +73,18 @@ class CNN(Network):
 
     def build_model(self):
         input_main = Input(shape=(29,))
-        x = Reshape((29, 1))(input_main)
-        x = Conv1D(8, kernel_size=2, strides=2, padding='same', activation=relu, input_shape=(29, 1))(x)
-        x = Flatten()(x)
-        x = Dense(40, activation=relu)(x)
-        softmax_out = Dense(2, activation=softmax)(x)
+        input_main = Reshape((29, 1))(input_main)
+
+        left_branch = Conv1D(16, kernel_size=6, strides=4, padding='valid', activation=relu)(input_main)
+
+        right_branch = Conv1D(4, kernel_size=4, strides=2, padding='valid', activation=relu)(input_main)
+        right_branch = Conv1D(8, kernel_size=2, strides=2, padding='valid', activation=relu)(right_branch)
+
+        main_branch = Concatenate()([left_branch, right_branch])
+        main_branch = Flatten()(main_branch)
+
+        main_branch = Dense(40, activation=relu)(main_branch)
+        softmax_out = Dense(2, activation=softmax)(main_branch)
 
         self.model = Model(inputs=input_main, outputs=softmax_out)
         return self.model

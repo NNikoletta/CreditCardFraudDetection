@@ -26,8 +26,8 @@ def main() -> None:
     load_data.download_dataset()
     x, y = load_data.load_dataset()
     x_train, x_valid, x_test, y_train, y_valid, y_test, scaler = preprocess.prepare_data(x, y)
-    # run_neural_network_CNN(x_train, x_valid, x_test, y_train, y_valid, y_test)
-    run_xgboost(x_train, x_valid, x_test, y_train, y_valid, y_test)
+    run_neural_network_CNN(x_train, x_valid, x_test, y_train, y_valid, y_test)
+    # run_xgboost(x_train, x_valid, x_test, y_train, y_valid, y_test)
 
 
 if __name__ == "__main__":

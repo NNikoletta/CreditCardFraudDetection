@@ -10,7 +10,7 @@ def visualize(y_test, predicted_classes):
                       index=['Legitimate \n (0)     ', 'Fraud\n (1)     '])
     plt.figure(figsize=(10, 7))
     sn.set(font_scale=1.2)
-    sn.heatmap(cm, annot=True, cmap='crest', fmt="d")
+    sn.heatmap(cm, annot=True, cmap='PuRd', fmt="d")
     plt.xlabel('Predicted Class')
     plt.ylabel('True Class')
     plt.show()
