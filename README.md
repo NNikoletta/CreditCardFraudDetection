@@ -1,6 +1,6 @@
 # Credit Card Fraud Detection Project
   
-This project focuses on a highly imbalanced credit card fraud detection dataset from Kaggle that contains credit card transactions made in September 2013. This is an end-to-end project utilizing deep learning.
+This project focuses on a highly imbalanced credit card fraud detection dataset from Kaggle that contains credit card transactions made in September 2013. This is an end-to-end project utilizing machine learning methods including deep learning as well as tree based algorithms.
 
 ## Project Status
 
@@ -19,7 +19,7 @@ The dataset is originally stored in a .csv file that consists of 31 attributes:
   - 1: Fraudulent transaction
  
 ### Data Acquisition
-The dataset is first downloaded in a form of a .csv file. Before this however, the existence of the correct file path is checked. If the path exists, the pipeline checks the existence of the file, which is followed by data validation in case it already exists. This ensures that the data is not corrupted.
+The dataset is first downloaded as a .csv file. Before this however, the existence of the correct file path is checked. If the path exists, the pipeline checks the existence of the file, which is followed by data validation in case it already exists. This ensures that the data is not corrupted.
 
 If the file is not found, the file is downloaded and if it is corrupted, the code raises an error with an explanation that describes why we cannot proceed with the processing of the data.
 
@@ -37,13 +37,17 @@ If the data passes every validation check, the code moves on to the next step.
 
 The data is then loaded into two numpy arrays _x_ and _y_. The former contains all the features while the latter stores all the classes that belong to each entry.
 
-The _Time_ attribute is currently excluded from the data. This feature only represents the time elapsed from the very first transaction in seconds. Because the data source does not indicate what the exact relation is between the time of the experiment and the true time of the day, I am not able to reliably determine if a transaction was made during the day or night. Additionally, the data is not described as data coming from one subject only, which means that I am not able to separate any accounts to follow a shopping pattern where the _Time_ attribute would be valuable. Due to the reasons described above, I have decided to exlude the _Time_ column from this pipeline. Nevertheless, I am open to exploring the possibility of using this data in a future continuation of this project.
+The _Time_ attribute is currently excluded from the data. This feature only represents the time elapsed from the very first transaction in seconds. Because the data source does not indicate what the exact relation is between the time of the experiment and the true time of the day, I am not able to reliably determine if a transaction was made during the day or night. Additionally, the data is not described as data coming from one subject only, which means that I am not able to separate any accounts to follow a shopping pattern where the _Time_ attribute would be valuable. Due to the reasons described above, I have decided to exclude the _Time_ column from this pipeline. Nevertheless, I am open to exploring the possibility of using this data in a future continuation of this project.
 
 ### Normalization of the data
 
-After the creation of the two previously mentioned numpy arrays that store the data (_x_, _y_), the focus falls on normalization. Because the project's main tools are neural networks, the data needs to be centred around zero to achieve the best training results. The _mean_ and _std_ of a few attributes were checked before proceeding with any modifications. Because the results of Principal Component Analysis (PCA) are very often already normalized, in certain cases there is no need for another normalization, however, in this scenario, the _std_ is varying. To fix this, _scikit-learn's_ _StandardScaler()_ is used after the data is separated into the _train_, _test_, and _validate_ sets in the ratio of ~80/10/10 respectively. The scaler is only fit on the training data to ensure that there is no data leakage and the performance of the model closely reflects the results it would show in a real life scenerio.
+After the creation of the two previously mentioned numpy arrays that store the data (_x_, _y_), the focus falls on normalization. Because some of the tools in this project, such as neural networks, require the data to be centred around zero for the best possible performance, the data needs to be normalized. The _mean_ and _std_ of a few attributes were checked before proceeding with any modifications. Because the results of Principal Component Analysis (PCA) are very often already normalized, in certain cases there is no need for another normalization, however, in this scenario, the _std_ is varying. To fix this, _scikit-learn's_ _StandardScaler()_ is used after the data is separated into the _train_, _test_, and _validate_ sets in the ratio of ~80/10/10 respectively. The scaler is only fit on the training data to ensure that there is no data leakage and the performance of the model closely reflects the results it would show in a real life scenario.
 
+On the other hand, the other used tools, such as _XGBoost_ do not require the data to be centred around zero. Due to this, the original data is also saved after the split for future use.
 
+The labels are stored in one-dimensional arrays: _y_train_, _y_valid_, _y_test_.
+
+Because this is a binary classification task, when neural networks are used, the model could use the one-dimensional data arrays as labels with the _sigmoid_ function at the classification step. However, I chose to add one-hot encoding for the labels. My choice is based purely on the possibility of later using and developing this code for a problem spanning over more classes.
 
 
 
