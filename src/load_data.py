@@ -24,8 +24,8 @@ def download_dataset():
     validate_dataset()
 
 def load_dataset():
-    df_tmp = pd.read_csv(raw_data_dir/config.raw_data_file)
-    x = df_tmp.drop(columns=["Time", "Class"]).to_numpy(dtype=np.float64)
-    y = df_tmp["Class"].to_numpy(dtype=np.int32)
+    dataframe = pd.read_csv(raw_data_dir/config.raw_data_file)
+    x = dataframe.drop(columns=["Time", "Class"]).to_numpy(dtype=np.float64)
+    y = dataframe["Class"].to_numpy(dtype=np.int32)
 
     return x, y

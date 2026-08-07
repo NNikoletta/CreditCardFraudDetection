@@ -9,6 +9,7 @@ class TrainingConfig:
     batch_size: int = 16
     epochs: int = 10
 
+
 @dataclass(frozen=True)
 class XGBoostConfig:
     n_estimators: int = 100
@@ -18,13 +19,14 @@ class XGBoostConfig:
     gamma: float = 0
     min_child_weight: float = 1
 
+
 @dataclass(frozen=True)
 class DataValidationConfig:
     raw_data_file: str = "creditcard.csv"
     expected_row_count: int = 284807
     expected_column_count: int = 31
-    expected_true_transaction: int = 284315
-    expected_fraudulent_transaction: int = 492
+    expected_legitimate_count: int = 284315
+    expected_fraudulent_count: int = 492
     expected_columns: tuple[str, ...] = (
         "Time",
         *tuple(f"V{i}" for i in range(1, 29)),

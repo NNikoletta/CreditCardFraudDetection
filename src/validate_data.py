@@ -45,14 +45,14 @@ def validate_dataset():
     fraudulent_transaction_count = (df["Class"] == 1).sum()
     legitimate_transaction_count = (df["Class"] == 0).sum()
 
-    if fraudulent_transaction_count != config.expected_fraudulent_transaction:  # checks if the number of fraudulent transactions is correct
+    if fraudulent_transaction_count != config.expected_fraudulent_count:  # checks if the number of fraudulent transactions is correct
         raise ValueError("Unexpected number of fraudulent transactions found.\n"
-                         f"Expected: {config.expected_fraudulent_transaction}.\n"
+                         f"Expected: {config.expected_fraudulent_count}.\n"
                          f"Found: {fraudulent_transaction_count}.")
 
-    if legitimate_transaction_count != config.expected_true_transaction:  # checks if the number of legitimate transactions is correct
+    if legitimate_transaction_count != config.expected_legitimate_count:  # checks if the number of legitimate transactions is correct
         raise ValueError("Unexpected number of legitimate transactions found.\n"
-                         f"Expected: {config.expected_true_transaction}.\n"
+                         f"Expected: {config.expected_legitimate_count}.\n"
                          f"Found: {legitimate_transaction_count}.")
 
     print("Validation of the dataset is completed successfully.")

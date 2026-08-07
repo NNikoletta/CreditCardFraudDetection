@@ -1,12 +1,16 @@
 import numpy as np
-from sklearn.metrics import f1_score, recall_score, precision_score
+from sklearn.metrics import f1_score, recall_score, precision_score, average_precision_score, roc_auc_score
 
 
-def calculate_metrics(y_test, predicted_classes):
+def calculate_metrics(y_test, predicted_classes, predicted_probabilities):
     f1 = f1_score(y_test, predicted_classes)
     recall = recall_score(y_test, predicted_classes)
-    precision = precision_score(y_test, predicted_classes)
+    precision = precision_score(y_test, predicted_classes, zero_division=0)
+    pr_auc = average_precision_score(y_test, predicted_probabilities)
+    roc_auc = roc_auc_score(y_test, predicted_probabilities)
     print('F1 score: ', round(f1, ndigits=3))
     print('Recall score: ', round(recall, ndigits=3))  # out of all yes cases, how many did the model catch
     print('Precision score: ', round(precision, ndigits=3))  # when the model says yes, how often is it right
-    return f1, recall, precision
+    print('PR-AUC: ', round(pr_auc, ndigits=3))
+    print('ROC-AUC: ', round(roc_auc, ndigits=3))
+    return f1, recall, precision, pr_auc, roc_auc

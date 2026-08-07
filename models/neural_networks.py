@@ -3,8 +3,9 @@ import keras
 from keras.activations import relu, softmax
 from keras.models import Model
 from keras.layers import Dense, Input, Reshape
-from keras.layers import Conv1D, AvgPool1D, Dropout, Concatenate
+from keras.layers import Conv1D, AvgPool1D, Concatenate
 from keras.layers import Flatten
+from keras.metrics import CategoricalAccuracy, F1Score
 from keras.utils import to_categorical
 from sklearn.utils.class_weight import compute_class_weight
 
@@ -20,7 +21,9 @@ class Network:
         self.build_model()
 
     def build_model(self):
-        pass
+        raise NotImplementedError(
+            "Subclass must implement its own build_model()."
+        )
 
     def train(self, x_train, y_train, x_valid, y_valid):
         train_label = to_categorical(y_train)
@@ -31,8 +34,10 @@ class Network:
             int(class_label): float(weight)
             for class_label, weight in zip(classes, weights)
         }
+
+        metrics = [CategoricalAccuracy(name='accuracy'), F1Score(name='f1_score')]
         self.model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),
-                           metrics=['accuracy', 'auc', 'f1_score'])
+                           metrics=metrics)
         self.model.summary()
         history = self.model.fit(x_train, train_label, class_weight=custom_weights, batch_size=self.batch_size,
                                  epochs=self.epochs, verbose=1, validation_data=(x_valid, valid_label))
@@ -40,16 +45,15 @@ class Network:
 
     def evaluate(self, x_test, y_test):
         test_label = to_categorical(y_test)
-        test_loss, test_acc, auc, _ = self.model.evaluate(x_test, test_label, verbose=1)
-        print('Test loss: ', test_loss)
-        print('Test accuracy: ', test_acc)
-        print('AUC: ', auc)
-        return test_loss, test_acc
+        test_metrics = self.model.evaluate(x_test, test_label, verbose=1, return_dict=True)
+        print('Test loss: ', round(test_metrics.get('loss'), ndigits=3))
+        print(f"Test accuracy: {round(test_metrics.get('accuracy')*100, ndigits=3)}%")
+        return test_metrics
 
     def predict(self, x_test):
         predicted_probabilities = self.model.predict(x_test)
         predicted_classes = np.argmax(predicted_probabilities, axis=1)
-        return predicted_classes
+        return predicted_classes, predicted_probabilities
 
 
 class PipelineTestModel(Network):  # TEMPORARY model that is used only to validate the end-to-end pipeline
@@ -73,11 +77,11 @@ class CNN(Network):
 
     def build_model(self):
         input_main = Input(shape=(29,))
-        input_main = Reshape((29, 1))(input_main)
+        reshaped_main = Reshape((29, 1))(input_main)
 
-        left_branch = Conv1D(16, kernel_size=6, strides=4, padding='valid', activation=relu)(input_main)
+        left_branch = Conv1D(16, kernel_size=6, strides=4, padding='valid', activation=relu)(reshaped_main)
 
-        right_branch = Conv1D(4, kernel_size=4, strides=2, padding='valid', activation=relu)(input_main)
+        right_branch = Conv1D(4, kernel_size=4, strides=2, padding='valid', activation=relu)(reshaped_main)
         right_branch = Conv1D(8, kernel_size=2, strides=2, padding='valid', activation=relu)(right_branch)
 
         main_branch = Concatenate()([left_branch, right_branch])
