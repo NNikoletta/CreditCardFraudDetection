@@ -27,11 +27,11 @@ def main() -> None:
     x, y = load_data.load_dataset()
     scaled_data, regular_data, labels, scaler = preprocess.prepare_data(x, y)
 
-    run_cnn(scaled_data.get('x_train_scaled'), scaled_data.get('x_valid_scaled'), scaled_data.get('x_test_scaled'),
-            labels.get('y_train'), labels.get('y_valid'), labels.get('y_test'))
+    # run_cnn(scaled_data.get('x_train_scaled'), scaled_data.get('x_valid_scaled'), scaled_data.get('x_test_scaled'),
+    #         labels.get('y_train'), labels.get('y_valid'), labels.get('y_test'))
 
-    # run_xgboost(regular_data.get('x_train'), regular_data.get('x_valid'), regular_data.get('x_test'),
-    #             labels.get('y_train'), labels.get('y_valid'), labels.get('y_test'))
+    run_xgboost(regular_data.get('x_train'), regular_data.get('x_valid'), regular_data.get('x_test'),
+                labels.get('y_train'), labels.get('y_valid'), labels.get('y_test'))
 
 
 if __name__ == "__main__":

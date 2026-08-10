@@ -77,17 +77,13 @@ class CNN(Network):
 
     def build_model(self):
         input_main = Input(shape=(29,))
-        reshaped_main = Reshape((29, 1))(input_main)
+        # reshaped_main = Reshape((29, 1))(input_main)
+        #
+        # main_branch = Conv1D(32, kernel_size=29, strides=1, padding='valid', activation=relu)(reshaped_main)
+        # main_branch = Flatten()(main_branch)
 
-        left_branch = Conv1D(16, kernel_size=6, strides=4, padding='valid', activation=relu)(reshaped_main)
-
-        right_branch = Conv1D(4, kernel_size=4, strides=2, padding='valid', activation=relu)(reshaped_main)
-        right_branch = Conv1D(8, kernel_size=2, strides=2, padding='valid', activation=relu)(right_branch)
-
-        main_branch = Concatenate()([left_branch, right_branch])
-        main_branch = Flatten()(main_branch)
-
-        main_branch = Dense(40, activation=relu)(main_branch)
+        main_branch = Dense(64, activation=relu)(input_main)
+        main_branch = Dense(32, activation=relu)(main_branch)
         softmax_out = Dense(2, activation=softmax)(main_branch)
 
         self.model = Model(inputs=input_main, outputs=softmax_out)

@@ -1,18 +1,21 @@
 import xgboost as xgb
 from sklearn.metrics import accuracy_score, log_loss
+from math import sqrt
 
-from src.config import XGBoostConfig
+from src.config import XGBoostConfig, DataValidationConfig
 
 
 class XGBoostModel:
     def __init__(self):
         config = XGBoostConfig()
+        data_information = DataValidationConfig()
         self.learning_rate = config.learning_rate
         self.n_estimators = config.n_estimators
         self.max_depth = config.max_depth
         self.gamma = config.gamma
         self.random_state = config.random_state
         self.min_child_weight = config.min_child_weight
+        self.ratio = sqrt(data_information.expected_legitimate_count/data_information.expected_fraudulent_count)
         self.model = xgb.XGBClassifier()
         self.build_model()
 
@@ -20,6 +23,7 @@ class XGBoostModel:
         self.model = xgb.XGBClassifier(objective='binary:logistic', learning_rate=self.learning_rate,
                                        n_estimators=self.n_estimators, max_depth=self.max_depth, gamma=self.gamma,
                                        random_state=self.random_state, min_child_weight=self.min_child_weight,
+                                       scale_pos_weight=self.ratio,
                                        eval_metric=['logloss'])
 
     def train(self, x_train, x_valid, y_train, y_valid):
