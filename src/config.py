@@ -8,17 +8,27 @@ from dotenv import load_dotenv
 @dataclass(frozen=True)
 class TrainingConfig:
     batch_size: int = 16
-    epochs: int = 10
+    epochs: int = 5
+
+
+@dataclass(frozen=True)
+class LogisticRegressionConfig:
+    random_state: int = 42
+    class_weight: str = None  # default = None, other = 'balanced'
+    solver: str = 'lbfgs'  # default = 'lbfgs', other = 'newton-cholesky'
+    penalty: str = 'l2'  # default = 'l2'
+    max_iter: int = 100  # default = 100
 
 
 @dataclass(frozen=True)
 class XGBoostConfig:
+    learning_rate: float = 0.1
     n_estimators: int = 100
     max_depth: int = 3
     random_state: int = 42
-    learning_rate: float = 0.1
     gamma: float = 0
     min_child_weight: float = 1
+    ratio: float = 1  # default = 1, other sqrt(expected_legitimate_count/expected_fraudulent_count)
 
 
 @dataclass(frozen=True)

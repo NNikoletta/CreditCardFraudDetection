@@ -14,6 +14,14 @@ def run_cnn(x_train, x_valid, x_test, y_train, y_valid, y_test):
     vs.visualize(y_test, predicted_classes)
 
 
+def run_logistic_regression(x_train, x_test, y_train, y_test):
+    model = nn.LogisticRegressionModel()
+    model.train(x_train, y_train)
+    predicted_classes, predicted_probabilities = model.predict(x_test, y_test)
+    calculate_metrics(y_test, predicted_classes, predicted_probabilities[:, 1])
+    vs.visualize(y_test, predicted_classes)
+
+
 def run_xgboost(x_train, x_valid, x_test, y_train, y_valid, y_test):
     model = dt.XGBoostModel()
     history = model.train(x_train, x_valid, y_train, y_valid)
@@ -27,11 +35,14 @@ def main() -> None:
     x, y = load_data.load_dataset()
     scaled_data, regular_data, labels, scaler = preprocess.prepare_data(x, y)
 
-    # run_cnn(scaled_data.get('x_train_scaled'), scaled_data.get('x_valid_scaled'), scaled_data.get('x_test_scaled'),
-    #         labels.get('y_train'), labels.get('y_valid'), labels.get('y_test'))
+    # run_logistic_regression(scaled_data['x_train_scaled'], scaled_data['x_test_scaled'],
+    #                         labels['y_train'], labels['y_test'])
 
-    run_xgboost(regular_data.get('x_train'), regular_data.get('x_valid'), regular_data.get('x_test'),
-                labels.get('y_train'), labels.get('y_valid'), labels.get('y_test'))
+    run_cnn(scaled_data['x_train_scaled'], scaled_data['x_valid_scaled'], scaled_data['x_test_scaled'],
+            labels['y_train'], labels['y_valid'], labels['y_test'])
+
+    # run_xgboost(regular_data['x_train'], regular_data['x_valid'], regular_data['x_test'],
+    #             labels['y_train'], labels['y_valid'], labels['y_test'])
 
 
 if __name__ == "__main__":

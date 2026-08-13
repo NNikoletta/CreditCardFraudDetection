@@ -19,7 +19,7 @@ def validate_dataset():
     except (pd.errors.ParserError, UnicodeDecodeError) as error:
         raise ValueError("Dataset is not a valid .csv file.") from error
 
-    if df.shape[1] != config.expected_column_count:  # checks id the column count is correct
+    if df.shape[1] != config.expected_column_count:  # checks if the column count is correct
         raise ValueError(f"The expected column count is: {config.expected_column_count} "
                          f"Found column count is: {df.shape[1]}")
 
