@@ -57,6 +57,17 @@ Because this is a binary classification task, when neural networks are used, the
 3. The dataset is downloaded automatically if it does not exist.
 4. The validation of the data is performed.
 5. The dataset is loaded into the previously mentioned numpy arrays.
+6. Normalization is performed and both the original and the transformed datasets are stored for future use.
+
+## Methods
+Detection of fraudulent transactions is a difficult but necessary task. With credit cards becoming one of the main mediums of transactions in modern day-to-day life, it has become increasingly important to be able to accurately identify anomalies in shopping behaviour to avoid losses. After performing a review of state-of-the-art models as well as the way detectors developed over time, I have decided to implement some architectures to compare various models and their performance on the previously described dataset. The following subchapters will describe the methods I have chosen. The two main families I focused on were neural networks and tree-based algorithms.
+
+### Neural Networks
+Neural networks are systems that have been inspired by the human brain’s ability to recognize patterns. Much like the brain, they were designed to be able to recognize underlying connections in a dataset.
+The main builder blocks of a neural network are the nodes or neurons that are grouped into layers. Each node is connected to nodes in a following layer and the neurons are assigned weights the adjustment of which is the main objective of a process called training.
+In the family of neural networks I have explored various methods in an order of increased complexity. I used Logistic Regression as the baseline method for comparison, since it is one of the first, common, and fast classifiers that perform very well on linearly separable events. Next, I built a simple MLP (Multilayer Perceptron), which I followed with a CNN (Convolutional Neural Network).
+
+
 
 
 
@@ -64,6 +75,7 @@ Because this is a binary classification task, when neural networks are used, the
 - Create a data class for storing all the training, validation, and testing data.
 - Explore Random Forrest for classification
 - Explore Support Vector Machines
+
 
 
 
