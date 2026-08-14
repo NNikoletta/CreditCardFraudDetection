@@ -5,7 +5,17 @@ from src import visualization as vs
 from src.metrics import calculate_metrics
 
 
+def run_logistic_regression(x_train, x_test, y_train, y_test):
+    print('Running the Logistic Regression...')
+    model = nn.LogisticRegressionModel()
+    model.train(x_train, y_train)
+    predicted_classes, predicted_probabilities = model.predict(x_test, y_test)
+    calculate_metrics(y_test, predicted_classes, predicted_probabilities[:, 1])
+    vs.visualize(y_test, predicted_classes)
+
+
 def run_cnn(x_train, x_valid, x_test, y_train, y_valid, y_test):
+    print('Running the regular CNN...')
     network = nn.CNN()
     network.train(x_train, y_train, x_valid, y_valid)
     network.evaluate(x_test, y_test)
@@ -14,15 +24,18 @@ def run_cnn(x_train, x_valid, x_test, y_train, y_valid, y_test):
     vs.visualize(y_test, predicted_classes)
 
 
-def run_logistic_regression(x_train, x_test, y_train, y_test):
-    model = nn.LogisticRegressionModel()
-    model.train(x_train, y_train)
-    predicted_classes, predicted_probabilities = model.predict(x_test, y_test)
+def run_attention_cnn(x_train, x_valid, x_test, y_train, y_valid, y_test):
+    print('Running the Attention CNN...')
+    network = nn.AttentionCNN()
+    network.train(x_train, y_train, x_valid, y_valid)
+    network.evaluate(x_test, y_test)
+    predicted_classes, predicted_probabilities = network.predict(x_test)
     calculate_metrics(y_test, predicted_classes, predicted_probabilities[:, 1])
     vs.visualize(y_test, predicted_classes)
 
 
 def run_xgboost(x_train, x_valid, x_test, y_train, y_valid, y_test):
+    print('Running XGBoost...')
     model = dt.XGBoostModel()
     history = model.train(x_train, x_valid, y_train, y_valid)
     predicted_classes, predicted_probabilities = model.predict(x_test, y_test)
@@ -38,7 +51,10 @@ def main() -> None:
     # run_logistic_regression(scaled_data['x_train_scaled'], scaled_data['x_test_scaled'],
     #                         labels['y_train'], labels['y_test'])
 
-    run_cnn(scaled_data['x_train_scaled'], scaled_data['x_valid_scaled'], scaled_data['x_test_scaled'],
+    # run_cnn(scaled_data['x_train_scaled'], scaled_data['x_valid_scaled'], scaled_data['x_test_scaled'],
+    #         labels['y_train'], labels['y_valid'], labels['y_test'])
+
+    run_attention_cnn(scaled_data['x_train_scaled'], scaled_data['x_valid_scaled'], scaled_data['x_test_scaled'],
             labels['y_train'], labels['y_valid'], labels['y_test'])
 
     # run_xgboost(regular_data['x_train'], regular_data['x_valid'], regular_data['x_test'],

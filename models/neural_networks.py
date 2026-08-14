@@ -107,10 +107,30 @@ class CNN(Network):
         reshaped_main = Reshape((29, 1))(input_main)
 
         main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
-        main_branch = AttributeAttention(kernel_size=3)(main_branch)
+        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
         main_branch = Flatten()(main_branch)
 
-        main_branch = Dense(40, activation=relu)(main_branch)
+        main_branch = Dense(32, activation=relu)(main_branch)
+        softmax_out = Dense(2, activation=softmax)(main_branch)
+
+        self.model = Model(inputs=input_main, outputs=softmax_out)
+        return self.model
+
+
+class AttentionCNN(Network):
+    def __init__(self):
+        super().__init__()
+
+    def build_model(self):
+        input_main = Input(shape=(29,))
+        reshaped_main = Reshape((29, 1))(input_main)
+
+        main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
+        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
+        main_branch = AttributeAttention(kernel_size=2)(main_branch)
+        main_branch = Flatten()(main_branch)
+
+        main_branch = Dense(32, activation=relu)(main_branch)
         softmax_out = Dense(2, activation=softmax)(main_branch)
 
         self.model = Model(inputs=input_main, outputs=softmax_out)
