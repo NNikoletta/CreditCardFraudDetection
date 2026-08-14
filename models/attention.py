@@ -31,22 +31,3 @@ class AttributeAttention(Layer):
         # Apply attention
         return out
 
-
-# def AttributeAttention(main_branch, kernel_size=3):  # main_branch  = input feature map
-#
-#     # Average Pooling
-#     x1 = reduce_mean(main_branch, axis=1)
-#     x1 = expand_dims(x1, axis=1)
-#
-#     # Max Pooling
-#     x2 = reduce_max(main_branch, axis=1)
-#     x2 = expand_dims(x2, axis=1)
-#
-#     # Concatenate
-#     out = Concatenate()([x1, x2])
-#
-#     # Conv layer
-#     out = Conv1D(1, kernel_size=kernel_size, padding='same', activation='sigmoid')(out)
-#     out = Multiply()([main_branch, out])
-#
-#     return out

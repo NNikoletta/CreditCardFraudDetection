@@ -3,7 +3,7 @@ import keras
 from keras.activations import relu, softmax
 from keras.models import Model
 from keras.layers import Dense, Input, Reshape
-from keras.layers import Conv1D, AvgPool1D, Concatenate
+from keras.layers import Conv1D
 from keras.layers import Flatten
 from keras.metrics import CategoricalAccuracy, F1Score
 from keras.utils import to_categorical
@@ -83,21 +83,6 @@ class Network:
         return predicted_classes, predicted_probabilities
 
 
-class PipelineTestModel(Network):  # TEMPORARY model that is used only to validate the end-to-end pipeline
-    def __init__(self):  # Not intended for true fraud detection
-        super().__init__()
-
-    def build_model(self):
-        self.model = keras.Sequential([
-            Input(shape=(29, 1)),
-            Conv1D(32, kernel_size=2, strides=1, padding='same', activation=relu),
-            AvgPool1D(pool_size=2, strides=2, padding='valid'),
-            Flatten(),
-            Dense(40, activation=relu),
-            Dense(2, activation=softmax)
-        ])
-
-
 class CNN(Network):
     def __init__(self):
         super().__init__()
@@ -126,8 +111,8 @@ class AttentionCNN(Network):
         reshaped_main = Reshape((29, 1))(input_main)
 
         main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
-        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
         main_branch = AttributeAttention(kernel_size=2)(main_branch)
+        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
         main_branch = Flatten()(main_branch)
 
         main_branch = Dense(32, activation=relu)(main_branch)
