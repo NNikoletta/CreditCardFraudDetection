@@ -1,0 +1,60 @@
+input_main = Input(shape=(29,))
+
+main_branch = Dense(64, activation=relu)(input_main)
+main_branch = Dense(32, activation=relu)(main_branch)
+main_branch = Dense(16, activation=relu)(main_branch)
+softmax_out = Dense(2, activation=softmax)(main_branch)
+
+
+MLP Results of run 1
+Validation loss: 0.0034 
+Validation accuracy: 99.9503% 
+Metrics:
+{'f1': 0.851063829787234, 'recall': 0.8163265306122449, 'precision': 0.8888888888888888, 'avg_precision': np.float64(0.8269032150784679), 'roc_auc': np.float64(0.9760238340548854)}
+Confusion matrix
+[[28142     5]
+ [    9    40]]
+
+MLP Results of run 2
+Validation loss: 0.0027 
+Validation accuracy: 99.9326% 
+Metrics:
+{'f1': 0.7764705882352941, 'recall': 0.673469387755102, 'precision': 0.9166666666666666, 'avg_precision': np.float64(0.8587446995750798), 'roc_auc': np.float64(0.99130584837765)}
+Confusion matrix
+[[28144     3]
+ [   16    33]]
+
+MLP Results of run 3
+Validation loss: 0.0033 
+Validation accuracy: 99.9291% 
+Metrics:
+{'f1': 0.7777777777777778, 'recall': 0.7142857142857143, 'precision': 0.8536585365853658, 'avg_precision': np.float64(0.8492056869390114), 'roc_auc': np.float64(0.9920635323444047)}
+Confusion matrix
+[[28141     6]
+ [   14    35]]
+
+MLP Results of run 4
+Validation loss: 0.003 
+Validation accuracy: 99.9503% 
+Metrics:
+{'f1': 0.851063829787234, 'recall': 0.8163265306122449, 'precision': 0.8888888888888888, 'avg_precision': np.float64(0.8612027121594804), 'roc_auc': np.float64(0.9778248742208362)}
+Confusion matrix
+[[28142     5]
+ [    9    40]]
+
+MLP Results of run 5
+Validation loss: 0.0027 
+Validation accuracy: 99.9291% 
+Metrics:
+{'f1': 0.7560975609756098, 'recall': 0.6326530612244898, 'precision': 0.9393939393939394, 'avg_precision': np.float64(0.8636457430690095), 'roc_auc': np.float64(0.9868938800162123)}
+Confusion matrix
+[[28145     2]
+ [   18    31]]
+
+Validation loss> mean: 0.003 std: 0.0003
+Validation accuracy> mean: 99.9383 std: 0.0099
+F1 score> mean: 0.8025 std: 0.0404
+Recall> mean: 0.7306 std: 0.0746
+Precision> mean: 0.8975 std: 0.029
+Average precision> mean: 0.8519 std: 0.0134
+ROC-AUC score> mean: 0.9848 std: 0.0067

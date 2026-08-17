@@ -1,0 +1,64 @@
+input_main = Input(shape=(29,))
+reshaped_main = Reshape((29, 1))(input_main)
+
+main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
+main_branch = Conv1D(16, kernel_size=29, strides=1, padding='valid', activation=relu)(main_branch)
+main_branch = Flatten()(main_branch)
+
+main_branch = Dense(32, activation=relu)(main_branch)
+softmax_out = Dense(2, activation=softmax)(main_branch)
+
+self.model = Model(inputs=input_main, outputs=softmax_out)
+
+CNN Results of run 1
+Validation loss: 0.0025 
+Validation accuracy: 99.9362% 
+Metrics:
+{'f1': 0.8, 'recall': 0.7346938775510204, 'precision': 0.8780487804878049, 'avg_precision': np.float64(0.8508890888186597), 'roc_auc': np.float64(0.9935701996007839)}
+Confusion matrix
+[[28142     5]
+ [   13    36]]
+
+CNN Results of run 2
+Validation loss: 0.0028 
+Validation accuracy: 99.9326% 
+Metrics:
+{'f1': 0.7865168539325843, 'recall': 0.7142857142857143, 'precision': 0.875, 'avg_precision': np.float64(0.8410990265136636), 'roc_auc': np.float64(0.9970461201142979)}
+Confusion matrix
+[[28142     5]
+ [   14    35]]
+
+CNN Results of run 3
+Validation loss: 0.003 
+Validation accuracy: 99.9433% 
+Metrics:
+{'f1': 0.8333333333333334, 'recall': 0.8163265306122449, 'precision': 0.851063829787234, 'avg_precision': np.float64(0.8248993681582503), 'roc_auc': np.float64(0.9961463250877499)}
+Confusion matrix
+[[28140     7]
+ [    9    40]]
+
+CNN Results of run 4
+Validation loss: 0.0031 
+Validation accuracy: 99.9007% 
+Metrics:
+{'f1': 0.6216216216216216, 'recall': 0.46938775510204084, 'precision': 0.92, 'avg_precision': np.float64(0.827430332080711), 'roc_auc': np.float64(0.9911666375435668)}
+Confusion matrix
+[[28145     2]
+ [   26    23]]
+
+CNN Results of run 5
+Validation loss: 0.0027 
+Validation accuracy: 99.9255% 
+Metrics:
+{'f1': 0.7407407407407407, 'recall': 0.6122448979591837, 'precision': 0.9375, 'avg_precision': np.float64(0.8397045931412644), 'roc_auc': np.float64(0.9936561187874445)}
+Confusion matrix
+[[28145     2]
+ [   19    30]]
+
+Validation loss> mean: 0.0028 std: 0.0002
+Validation accuracy> mean: 99.9277 std: 0.0146
+F1 score> mean: 0.7564 std: 0.0737
+Recall> mean: 0.6694 std: 0.1193
+Precision> mean: 0.8923 std: 0.0317
+Average precision> mean: 0.8368 std: 0.0095
+ROC-AUC score> mean: 0.9943 std: 0.0021

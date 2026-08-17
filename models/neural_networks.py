@@ -75,14 +75,30 @@ class Network:
         test_label = to_categorical(y_test)
         test_metrics = self.model.evaluate(x_test, test_label, verbose=1, return_dict=True)
         if valid:
-            print('Validation loss: ', round(test_metrics.get('loss'), ndigits=3))
-            print(f'Validation accuracy: {round(test_metrics.get("accuracy")*100, ndigits=3)}%')
+            print('Validation loss: ', round(test_metrics['loss'], ndigits=3))
+            print(f'Validation accuracy: {round(test_metrics["accuracy"]*100, ndigits=3)}%')
         return test_metrics
 
     def predict(self, x_test):
         predicted_probabilities = self.model.predict(x_test)
         predicted_classes = np.argmax(predicted_probabilities, axis=1)
         return predicted_classes, predicted_probabilities
+
+
+class MLP(Network):
+    def __init__(self):
+        super().__init__()
+
+    def build_model(self):
+        input_main = Input(shape=(29,))
+
+        main_branch = Dense(64, activation=relu)(input_main)
+        main_branch = Dense(32, activation=relu)(main_branch)
+        main_branch = Dense(16, activation=relu)(main_branch)
+        softmax_out = Dense(2, activation=softmax)(main_branch)
+
+        self.model = Model(inputs=input_main, outputs=softmax_out)
+        return self.model
 
 
 class CNN(Network):
@@ -93,11 +109,11 @@ class CNN(Network):
         input_main = Input(shape=(29,))
         reshaped_main = Reshape((29, 1))(input_main)
 
-        main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
-        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
+        main_branch = Conv1D(32, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
+        main_branch = Conv1D(64, kernel_size=29, strides=1, padding='valid', activation=relu)(main_branch)
         main_branch = Flatten()(main_branch)
 
-        main_branch = Dense(32, activation=relu)(main_branch)
+        main_branch = Dense(16, activation=relu)(main_branch)
         softmax_out = Dense(2, activation=softmax)(main_branch)
 
         self.model = Model(inputs=input_main, outputs=softmax_out)
