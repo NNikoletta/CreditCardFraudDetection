@@ -1,0 +1,64 @@
+input_main = Input(shape=(29,))
+reshaped_main = Reshape((29, 1))(input_main)
+
+main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
+main_branch = Conv1D(32, kernel_size=29, strides=1, padding='valid', activation=relu)(main_branch)
+main_branch = Flatten()(main_branch)
+
+main_branch = Dense(16, activation=relu)(main_branch)
+softmax_out = Dense(2, activation=softmax)(main_branch)
+
+self.model = Model(inputs=input_main, outputs=softmax_out)
+
+CNN Results of run 1
+Validation loss: 0.0028 
+Validation accuracy: 99.9539% 
+Metrics:
+{'f1': 0.865979381443299, 'recall': 0.8571428571428571, 'precision': 0.875, 'avg_precision': np.float64(0.8600094343783011), 'roc_auc': np.float64(0.994984059634441)}
+Confusion matrix
+[[28141     6]
+ [    7    42]]
+
+CNN Results of run 2
+Validation loss: 0.0029 
+Validation accuracy: 99.9397% 
+Metrics:
+{'f1': 0.8089887640449438, 'recall': 0.7346938775510204, 'precision': 0.9, 'avg_precision': np.float64(0.8325946163210165), 'roc_auc': np.float64(0.9842372732657918)}
+Confusion matrix
+[[28143     4]
+ [   13    36]]
+
+CNN Results of run 3
+Validation loss: 0.0041 
+Validation accuracy: 99.9397% 
+Metrics:
+{'f1': 0.8282828282828283, 'recall': 0.8367346938775511, 'precision': 0.82, 'avg_precision': np.float64(0.7711165696555486), 'roc_auc': np.float64(0.9944080023027791)}
+Confusion matrix
+[[28138     9]
+ [    8    41]]
+
+CNN Results of run 4
+Validation loss: 0.0035 
+Validation accuracy: 99.9468% 
+Metrics:
+{'f1': 0.8351648351648352, 'recall': 0.7755102040816326, 'precision': 0.9047619047619048, 'avg_precision': np.float64(0.843502392343229), 'roc_auc': np.float64(0.9931257400107164)}
+Confusion matrix
+[[28143     4]
+ [   11    38]]
+
+CNN Results of run 5
+Validation loss: 0.0031 
+Validation accuracy: 99.9433% 
+Metrics:
+{'f1': 0.8333333333333334, 'recall': 0.8163265306122449, 'precision': 0.851063829787234, 'avg_precision': np.float64(0.7559991210691008), 'roc_auc': np.float64(0.9934831928294819)}
+Confusion matrix
+[[28140     7]
+ [    9    40]]
+
+Validation loss> mean: 0.0033 std: 0.0005
+Validation accuracy> mean: 99.9447 std: 0.0053
+F1 score> mean: 0.8343 std: 0.0183
+Recall> mean: 0.8041 std: 0.044
+Precision> mean: 0.8702 std: 0.0316
+Average precision> mean: 0.8126 std: 0.0413
+ROC-AUC score> mean: 0.992 std: 0.004
