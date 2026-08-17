@@ -34,13 +34,14 @@ class LogisticRegressionModel:  # Baseline comparison for neural networks
         history = self.model.fit(x_train, y_train)
         return history
 
-    def predict(self, x_test, y_test):
+    def predict(self, x_test, y_test, valid=False):
         predicted_classes = self.model.predict(x_test)
         predicted_probabilities = self.model.predict_proba(x_test)
-        test_acc = accuracy_score(y_test, predicted_classes)
-        test_loss = log_loss(y_test, predicted_probabilities)
-        print('Test loss: ', round(test_loss, ndigits=3))
-        print(f'Test accuracy: {round(test_acc*100, ndigits=3)}%')
+        if valid:
+            valid_acc = accuracy_score(y_test, predicted_classes)
+            valid_loss = log_loss(y_test, predicted_probabilities)
+            print('Validation loss: ', round(valid_loss, ndigits=3))
+            print(f'Validation accuracy: {round(valid_acc*100, ndigits=3)}%')
         return predicted_classes, predicted_probabilities
 
 
@@ -70,11 +71,12 @@ class Network:
                                  epochs=self.epochs, verbose=1, validation_data=(x_valid, valid_label))
         return history
 
-    def evaluate(self, x_test, y_test):
+    def evaluate(self, x_test, y_test, valid=False):
         test_label = to_categorical(y_test)
         test_metrics = self.model.evaluate(x_test, test_label, verbose=1, return_dict=True)
-        print('Test loss: ', round(test_metrics.get('loss'), ndigits=3))
-        print(f"Test accuracy: {round(test_metrics.get('accuracy')*100, ndigits=3)}%")
+        if valid:
+            print('Validation loss: ', round(test_metrics.get('loss'), ndigits=3))
+            print(f'Validation accuracy: {round(test_metrics.get("accuracy")*100, ndigits=3)}%')
         return test_metrics
 
     def predict(self, x_test):
@@ -111,8 +113,8 @@ class AttentionCNN(Network):
         reshaped_main = Reshape((29, 1))(input_main)
 
         main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
-        main_branch = AttributeAttention(kernel_size=2)(main_branch)
         main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
+        main_branch = AttributeAttention(kernel_size=2)(main_branch)
         main_branch = Flatten()(main_branch)
 
         main_branch = Dense(32, activation=relu)(main_branch)

@@ -28,11 +28,12 @@ class XGBoostModel:
         history = self.model.fit(x_train, y_train, eval_set=[(x_valid, y_valid)])
         return history
 
-    def predict(self, x_test, y_test):
+    def predict(self, x_test, y_test, valid=False):
         predicted_classes = self.model.predict(x_test)
         predicted_probabilities = self.model.predict_proba(x_test)
-        test_acc = accuracy_score(y_test, predicted_classes)
-        test_loss = log_loss(y_test, predicted_probabilities)
-        print('Test loss: ', round(test_loss, ndigits=3))
-        print(f'Test accuracy: {round(test_acc*100, ndigits=3)}%')
+        if valid:
+            valid_acc = accuracy_score(y_test, predicted_classes)
+            valid_loss = log_loss(y_test, predicted_probabilities)
+            print('Validation loss: ', round(valid_loss, ndigits=3))
+            print(f'Validation accuracy: {round(valid_acc*100, ndigits=3)}%')
         return predicted_classes, predicted_probabilities

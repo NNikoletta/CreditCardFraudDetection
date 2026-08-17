@@ -12,4 +12,9 @@ def calculate_metrics(y_test, predicted_classes, predicted_probabilities):
     print('Precision score: ', round(precision, ndigits=3))  # when the model says yes, how often is it right
     print('Average precision: ', round(avg_precision, ndigits=3))
     print('ROC-AUC: ', round(roc_auc, ndigits=3))
-    return f1, recall, precision, avg_precision, roc_auc
+    metrics = {'f1': f1,
+               'recall': recall,
+               'precision': precision,
+               'avg_precision': avg_precision,
+               'roc_auc': roc_auc}
+    return metrics

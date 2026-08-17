@@ -5,7 +5,8 @@ import pandas as pd
 
 
 def visualize(y_test, predicted_classes):
-    cm = pd.DataFrame(confusion_matrix(y_test, predicted_classes),
+    conf_matr = confusion_matrix(y_test, predicted_classes)
+    cm = pd.DataFrame(conf_matr,
                       columns=['(0) \n Legitimate', '(1) \n Fraud'],
                       index=['Legitimate \n (0)     ', 'Fraud\n (1)     '])
     plt.figure(figsize=(10, 7))
@@ -14,4 +15,5 @@ def visualize(y_test, predicted_classes):
     plt.xlabel('Predicted Class')
     plt.ylabel('True Class')
     plt.show()
+    return conf_matr
 
