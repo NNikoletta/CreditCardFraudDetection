@@ -10,6 +10,9 @@ softmax_out = Dense(2, activation=softmax)(main_branch)
 
 self.model = Model(inputs=input_main, outputs=softmax_out)
 
+batch_size = 16
+epochs = 5
+
 CNN Results of run 1
 Validation loss: 0.0025 
 Validation accuracy: 99.9362% 

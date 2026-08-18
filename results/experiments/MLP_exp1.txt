@@ -5,6 +5,8 @@ main_branch = Dense(32, activation=relu)(main_branch)
 main_branch = Dense(16, activation=relu)(main_branch)
 softmax_out = Dense(2, activation=softmax)(main_branch)
 
+batch_size = 16
+epochs = 5
 
 MLP Results of run 1
 Validation loss: 0.0034 

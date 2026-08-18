@@ -1,14 +1,17 @@
- input_main = Input(shape=(29,))
- reshaped_main = Reshape((29, 1))(input_main)
+input_main = Input(shape=(29,))
+reshaped_main = Reshape((29, 1))(input_main)
 
- main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
- main_branch = Conv1D(32, kernel_size=29, strides=1, padding='valid', activation=relu)(main_branch)
- main_branch = Flatten()(main_branch)
+main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
+main_branch = Conv1D(32, kernel_size=29, strides=1, padding='valid', activation=relu)(main_branch)
+main_branch = Flatten()(main_branch)
 
- main_branch = Dense(32, activation=relu)(main_branch)
- softmax_out = Dense(2, activation=softmax)(main_branch)
+main_branch = Dense(32, activation=relu)(main_branch)
+softmax_out = Dense(2, activation=softmax)(main_branch)
 
- self.model = Model(inputs=input_main, outputs=softmax_out)
+self.model = Model(inputs=input_main, outputs=softmax_out)
+
+batch_size = 16
+epochs = 5
 
 CNN Results of run 1
 Validation loss: 0.0025 

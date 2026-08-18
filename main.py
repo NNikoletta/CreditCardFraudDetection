@@ -75,7 +75,7 @@ def main() -> None:
         validation_metrics = []
         for i in range(0, runs):
             scaled_data, regular_data, labels, scaler = preprocess.prepare_data(x, y)
-            cm, metrics, valid_metric = run_cnn(x_train=scaled_data['x_train_scaled'],
+            cm, metrics, valid_metric = run_mlp(x_train=scaled_data['x_train_scaled'],
                                                 x_valid=scaled_data['x_valid_scaled'],
                                                 x_test=scaled_data['x_valid_scaled'],
                                                 y_train=labels['y_train'],
@@ -102,10 +102,10 @@ def main() -> None:
             all_loss.append(validation_metrics[i]['loss'])
             all_acc.append(validation_metrics[i]['accuracy']*100)
 
-        file_dir = results_path/"CNN_exp4.txt"
+        file_dir = results_path/"MLP_exp2.txt"
         with open(file_dir, "w") as f:
             for i in range(0, runs):
-                f.write(f"CNN Results of run {i+1}\n")
+                f.write(f"MLP Results of run {i+1}\n")
                 f.write(f"Validation loss: {np.round(all_loss[i], decimals=4)} \n")
                 f.write(f"Validation accuracy: {np.round(all_acc[i], decimals=4)}% \n")
                 f.write("Metrics:\n")

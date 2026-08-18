@@ -1,4 +1,3 @@
-from pathlib import Path
 import pandas as pd
 import numpy as np
 
@@ -12,7 +11,8 @@ config = DataValidationConfig()
 
 def download_dataset():
     ensure_dir(raw_data_dir)  # this ensures that the directory for the data exists
-    if Path(raw_data_dir/config.raw_data_file).is_file():  # if directory exists AND has the correct file
+    file_path = raw_data_dir/config.raw_data_file
+    if file_path.is_file():  # if directory exists AND has the correct file
         print("File already exists.")  # assume that raw data exists
     else:  # otherwise
         api = KaggleApi()
@@ -22,6 +22,7 @@ def download_dataset():
         print("Dataset successfully downloaded.")
 
     validate_dataset()
+
 
 def load_dataset():
     dataframe = pd.read_csv(raw_data_dir/config.raw_data_file)
