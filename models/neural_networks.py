@@ -42,6 +42,9 @@ class LogisticRegressionModel:  # Baseline comparison for neural networks
             valid_loss = log_loss(y_test, predicted_probabilities)
             print('Validation loss: ', round(valid_loss, ndigits=3))
             print(f'Validation accuracy: {round(valid_acc*100, ndigits=3)}%')
+            test_metrics = {'loss': valid_loss,
+                            'accuracy': valid_acc}
+            return predicted_classes, predicted_probabilities, test_metrics
         return predicted_classes, predicted_probabilities
 
 
@@ -109,8 +112,8 @@ class CNN(Network):
         input_main = Input(shape=(29,))
         reshaped_main = Reshape((29, 1))(input_main)
 
-        main_branch = Conv1D(32, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
-        main_branch = Conv1D(64, kernel_size=29, strides=1, padding='valid', activation=relu)(main_branch)
+        main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
+        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
         main_branch = Flatten()(main_branch)
 
         main_branch = Dense(16, activation=relu)(main_branch)

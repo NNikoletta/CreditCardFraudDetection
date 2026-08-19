@@ -1,0 +1,67 @@
+input_main = Input(shape=(29,))
+reshaped_main = Reshape((29, 1))(input_main)
+
+main_branch = Conv1D(32, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
+main_branch = Conv1D(64, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
+main_branch = Flatten()(main_branch)
+
+main_branch = Dense(16, activation=relu)(main_branch)
+softmax_out = Dense(2, activation=softmax)(main_branch)
+
+self.model = Model(inputs=input_main, outputs=softmax_out)
+
+batch_size = 16
+epochs = 5
+
+CNN Results of run 1
+Validation loss: 0.0064 
+Validation accuracy: 99.9362% 
+Metrics:
+{'f1': 0.8163265306122449, 'recall': 0.8163265306122449, 'precision': 0.8163265306122449, 'avg_precision': np.float64(0.6868215870098262), 'roc_auc': np.float64(0.9218360168880144)}
+Confusion matrix
+[[28138     9]
+ [    9    40]]
+
+CNN Results of run 2
+Validation loss: 0.004 
+Validation accuracy: 99.922% 
+Metrics:
+{'f1': 0.8, 'recall': 0.8979591836734694, 'precision': 0.7213114754098361, 'avg_precision': np.float64(0.6676305838534837), 'roc_auc': np.float64(0.9767420024463404)}
+Confusion matrix
+[[28130    17]
+ [    5    44]]
+
+CNN Results of run 3
+Validation loss: 0.0041 
+Validation accuracy: 99.9362% 
+Metrics:
+{'f1': 0.8235294117647058, 'recall': 0.8571428571428571, 'precision': 0.7924528301886793, 'avg_precision': np.float64(0.7016668315711109), 'roc_auc': np.float64(0.9740295663510012)}
+Confusion matrix
+[[28136    11]
+ [    7    42]]
+
+CNN Results of run 4
+Validation loss: 0.0039 
+Validation accuracy: 99.9362% 
+Metrics:
+{'f1': 0.8163265306122449, 'recall': 0.8163265306122449, 'precision': 0.8163265306122449, 'avg_precision': np.float64(0.6928346395385067), 'roc_auc': np.float64(0.9609796382403459)}
+Confusion matrix
+[[28138     9]
+ [    9    40]]
+
+CNN Results of run 5
+Validation loss: 0.0034 
+Validation accuracy: 99.9433% 
+Metrics:
+{'f1': 0.8333333333333334, 'recall': 0.8163265306122449, 'precision': 0.851063829787234, 'avg_precision': np.float64(0.714906190019332), 'roc_auc': np.float64(0.9778060227537209)}
+Confusion matrix
+[[28140     7]
+ [    9    40]]
+
+Validation loss> mean: 0.0044 std: 0.001
+Validation accuracy> mean: 99.9347 std: 0.0069
+F1 score> mean: 0.8179 std: 0.0109
+Recall> mean: 0.8408 std: 0.0327
+Precision> mean: 0.7995 std: 0.0433
+Average precision> mean: 0.6928 std: 0.0157
+ROC-AUC score> mean: 0.9623 std: 0.0211
