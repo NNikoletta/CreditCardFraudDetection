@@ -67,7 +67,7 @@ def main() -> None:
 
     validation = True
     runs = 5
-    results_path = project_root/"results"/"experiments"
+    results_path = project_root/"results"/"outdated_experiments"
 
     if validation:
         confusion_matrices = []
