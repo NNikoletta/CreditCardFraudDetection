@@ -12,10 +12,10 @@ def run_logistic_regression(x_train, x_test, y_train, y_test, valid):
     print('Running Logistic Regression...')
     model = nn.LogisticRegressionModel()
     model.train(x_train, y_train)
-    predicted_classes, predicted_probabilities = model.predict(x_test, y_test, valid=valid)
+    predicted_classes, predicted_probabilities, test_metrics = model.predict(x_test, y_test, valid=valid)
     metrics = calculate_metrics(y_test, predicted_classes, predicted_probabilities[:, 1])
     cm = vs.visualize(y_test, predicted_classes)
-    return cm, metrics
+    return cm, metrics, test_metrics
 
 
 def run_mlp(x_train, x_valid, x_test, y_train, y_valid, y_test, valid):
@@ -44,11 +44,11 @@ def run_attention_cnn(x_train, x_valid, x_test, y_train, y_valid, y_test, valid)
     print('Running the Attention CNN...')
     network = nn.AttentionCNN()
     network.train(x_train, y_train, x_valid, y_valid)
-    network.evaluate(x_test, y_test, valid=valid)
+    test_metrics = network.evaluate(x_test, y_test, valid=valid)
     predicted_classes, predicted_probabilities = network.predict(x_test)
     metrics = calculate_metrics(y_test, predicted_classes, predicted_probabilities[:, 1])
     cm = vs.visualize(y_test, predicted_classes)
-    return cm, metrics
+    return cm, metrics, test_metrics
 
 
 def run_xgboost(x_train, x_valid, x_test, y_train, y_valid, y_test, valid):
@@ -75,12 +75,17 @@ def main() -> None:
         validation_metrics = []
         for i in range(0, runs):
             scaled_data, regular_data, labels, scaler = preprocess.prepare_data(x, y)
-            cm, metrics, valid_metric = run_mlp(x_train=scaled_data['x_train_scaled'],
+            cm, metrics, valid_metric = run_cnn(x_train=scaled_data['x_train_scaled'],
                                                 x_valid=scaled_data['x_valid_scaled'],
                                                 x_test=scaled_data['x_valid_scaled'],
                                                 y_train=labels['y_train'],
                                                 y_valid=labels['y_valid'],
                                                 y_test=labels['y_valid'], valid=True)
+
+            # cm, metrics, valid_metric = run_logistic_regression(x_train=scaled_data['x_train_scaled'],
+            #                                                     x_test=scaled_data['x_valid_scaled'],
+            #                                                     y_train=labels['y_train'],
+            #                                                     y_test=labels['y_valid'], valid=True)
 
             confusion_matrices.append(cm)
             all_metrics.append(metrics)
@@ -102,10 +107,10 @@ def main() -> None:
             all_loss.append(validation_metrics[i]['loss'])
             all_acc.append(validation_metrics[i]['accuracy']*100)
 
-        file_dir = results_path/"MLP_exp2.txt"
+        file_dir = results_path/"CNN_exp5_2.txt"
         with open(file_dir, "w") as f:
             for i in range(0, runs):
-                f.write(f"MLP Results of run {i+1}\n")
+                f.write(f"CNN Results of run {i+1}\n")
                 f.write(f"Validation loss: {np.round(all_loss[i], decimals=4)} \n")
                 f.write(f"Validation accuracy: {np.round(all_acc[i], decimals=4)}% \n")
                 f.write("Metrics:\n")
@@ -120,12 +125,6 @@ def main() -> None:
             f.write(f"Precision> mean: {np.round(np.mean(np.array(all_precision)), decimals=4)} std: {np.round(np.std(np.array(all_precision)), decimals=4)}\n")
             f.write(f"Average precision> mean: {np.round(np.mean(np.array(all_avg_precision)), decimals=4)} std: {np.round(np.std(np.array(all_avg_precision)), decimals=4)}\n")
             f.write(f"ROC-AUC score> mean: {np.round(np.mean(np.array(all_roc_auc)), decimals=4)} std: {np.round(np.std(np.array(all_roc_auc)), decimals=4)}\n")
-
-    else:
-        scaled_data, regular_data, labels, scaler = preprocess.prepare_data(x, y)
-        run_mlp(x_train=scaled_data['x_train_scaled'], x_valid=scaled_data['x_valid_scaled'],
-                x_test=scaled_data['x_test_scaled'],
-                y_train=labels['y_train'], y_valid=labels['y_valid'], y_test=labels['y_test'], valid=True)
 
 
 if __name__ == "__main__":
