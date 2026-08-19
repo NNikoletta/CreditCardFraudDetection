@@ -1,13 +1,12 @@
 import numpy as np
 import json
-from pathlib import Path
 from sklearn.model_selection import train_test_split
 
 from src.config import SplitConfig, split_dir
 from src.utils import ensure_dir
 
 
-def create_split_indices(y: np.ndarray, config: SplitConfig):
+def create_split_indices(y: np.ndarray, config: SplitConfig) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     all_indices = np.arange(len(y))
 
     development_indices, test_indices = train_test_split(all_indices,
@@ -26,7 +25,11 @@ def create_split_indices(y: np.ndarray, config: SplitConfig):
 
 
 def save_split(y: np.ndarray, train_indices: np.ndarray, validation_indices: np.ndarray,
-               test_indices: np.ndarray, config: SplitConfig):
+               test_indices: np.ndarray, config: SplitConfig) -> None:
+
+    validate_split(y, train_indices, validation_indices, test_indices)
+
+    print("Begin saving split data...")
     ensure_dir(split_dir)
 
     indices_path = split_dir/f"{config.split_id}.npz"
@@ -57,21 +60,23 @@ def save_split(y: np.ndarray, train_indices: np.ndarray, validation_indices: np.
         "validation_fraction": config.validation_fraction,
         "sample_counts": {
             "train": len(train_indices),
-            "valid": len(validation_indices),
+            "validation": len(validation_indices),
             "test": len(test_indices)
         },
         "class_counts": {
             "train": class_counts(train_indices),
-            "valid": class_counts(validation_indices),
+            "validation": class_counts(validation_indices),
             "test": class_counts(test_indices)
         }
     }
+
+    print("Split was saved successfully")
 
     with metadata_path.open("w", encoding="utf-8") as json_file:
         json.dump(metadata, json_file, indent=2)
 
 
-def load_split(split_id: str, y: np.ndarray):
+def load_split(split_id: str, y: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     indices_path = split_dir/f"{split_id}.npz"
 
     if not indices_path.is_file():
@@ -105,7 +110,7 @@ def load_split(split_id: str, y: np.ndarray):
 def validate_split(y: np.ndarray,
                    train_indices: np.ndarray,
                    validation_indices: np.ndarray,
-                   test_indices: np.array) -> None:
+                   test_indices: np.ndarray) -> None:
     print("Begin validation of the split...")
     if y.ndim != 1:
         raise ValueError(
@@ -160,7 +165,7 @@ def validate_split(y: np.ndarray,
     # Verify that none of the sets overlap.
     for first_set, second_set in split_pairs:
         overlap = np.intersect1d(splits[first_set], splits[second_set], assume_unique=True)  # AU=True -> faster exec
-        if overlap > 0:
+        if overlap.size > 0:
             raise ValueError(
                 f"The {first_set} and {second_set} contain overlapping indices: {overlap}."
             )
@@ -170,7 +175,7 @@ def validate_split(y: np.ndarray,
 
     # Verify that the loaded indices are the same as the expected indices.
     if not np.array_equal(np.sort(all_indices), expected_indices):
-        missing_indices = np.setdiff1d(all_indices, expected_indices)  # returns items that are in the
+        missing_indices = np.setdiff1d(expected_indices, all_indices)  # returns items that are in the
         raise ValueError(                                              # first array but not in the second one
             "Unexpected index values."
             f"Missing index values found: {missing_indices}."
