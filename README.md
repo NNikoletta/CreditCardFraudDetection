@@ -1,10 +1,10 @@
 # Credit Card Fraud Detection Project
   
-This project focuses on a highly imbalanced credit card fraud detection dataset from Kaggle that contains credit card transactions made in September 2013. This is an end-to-end project utilizing machine learning methods, including deep learning as well as tree-based algorithms.
+This project focuses on a highly imbalanced credit card fraud detection dataset from Kaggle that contains credit card transactions made in September 2013. This is an end-to-end project utilizing machine learning methods, including deep learning as well as tree-based algorithms. The aim of this work is to compare the performance of various models.
 
 ## Project Status
 
-This project is in its early stages with the current focus being on fine-tuning the existing code and researching the state-of-the-art methods.
+The project is in its experimental phase the focus of which is the optimization of hyperparameters.
 
 ## A little bit about the data
 ### Data Source and Structure
@@ -42,7 +42,7 @@ The _Time_ attribute is currently excluded from the data. This feature only repr
 
 ### Normalization of the data
 
-After the creation of the two previously mentioned numpy arrays that store the data (_x_, _y_), the focus falls on normalization. Because some of the tools in this project, such as neural networks, require the data to be centred around zero for the best possible performance, the data needs to be normalized. The _mean_ and _std_ of a few attributes were checked before proceeding with any modifications. Because the results of Principal Component Analysis (PCA) are very often already normalized, in certain cases there is no need for another normalization, however, in this scenario, the _std_ is varying. To fix this, _scikit-learn's_ _StandardScaler()_ is used after the data is separated into the _train_, _test_, and _validate_ sets in the ratio of ~80/10/10 respectively.  To address the imbalance, during the splitting of the datasets, stratification is used on the training and validation sets. The scaler is only fit on the training data to ensure that there is no data leakage and the performance of the model closely reflects the results it would show in a real life scenario.
+After the creation of the two previously mentioned numpy arrays that store the data (_x_, _y_), the focus falls on normalization. Some tools that are utilized in this project, such as neural networks, tend to benefit from the data being centred around zero, that is why I decided to apply normalization. The _mean_ and _std_ of a few attributes were checked before proceeding with any modifications. The results of Principle Component Analysis (PCA) often do not require any changes to be made, in certain cases there is no need for normalization, however, in this scenario, the _std_ is varying. To fix this, _scikit-learn's_ _StandardScaler()_ is used after the data is separated into the _train_, _test_, and _validate_ sets in the ratio of ~80/10/10 respectively.  To address the imbalance, during the splitting of the datasets, stratification is used on the training and validation sets. The scaler is only fit on the training data to ensure that there is no data leakage and the performance of the model closely reflects the results it would show in a real life scenario.
 
 On the other hand, the other used tools, such as _XGBoost_ do not require the data to be centred around zero. Due to this, the original data is also saved after the split for future use.
 
@@ -60,12 +60,65 @@ Because this is a binary classification task, when neural networks are used, the
 6. Normalization is performed and both the original and the transformed datasets are stored for future use.
 
 ## Methods
-Detection of fraudulent transactions is a difficult but necessary task. With credit cards becoming one of the main mediums of transactions in modern day-to-day life, it has become increasingly important to be able to accurately identify anomalies in shopping behaviour to avoid losses. After performing a review of state-of-the-art models as well as the way detectors developed over time, I have decided to implement some architectures to compare various models and their performance on the previously described dataset. The following subchapters will describe the methods I have chosen. The two main families I focused on were neural networks and tree-based algorithms.
+Detection of fraudulent transactions is a difficult but necessary task. With credit cards becoming one of the main mediums of transactions in modern day-to-day life, it has become increasingly important to be able to accurately identify anomalies in shopping behaviour to avoid losses. After performing a review of state-of-the-art models as well as the way detectors developed over time, I have decided to implement some architectures to compare various models and their performance on the previously described dataset. The following subchapters will describe the methods I have chosen. The two main families I focused on were neural networks and tree-based algorithms, I also explored linear classifiers such as Logistic Regression as a baseline for performance comparison.
 
 ### Neural Networks
 Neural networks are systems that have been inspired by the human brain’s ability to recognize patterns. Much like the brain, they were designed to be able to recognize underlying connections in a dataset.
 The main builder blocks of a neural network are the nodes or neurons that are grouped into layers. Each node is connected to nodes in a following layer and the neurons are assigned weights the adjustment of which is the main objective of a process called training.
-In the family of neural networks I have explored various methods in an order of increased complexity. I used Logistic Regression as the baseline method for comparison, since it is one of the first, common, and fast classifiers that perform very well on linearly separable events. Next, I built a simple MLP (Multilayer Perceptron), which I followed with a CNN (Convolutional Neural Network).
+In the family of neural networks I have explored various methods in an order of increased complexity. I used Logistic Regression as the baseline method for comparison, since it is one of the first classifiers that perform very well on linearly separable events. Next, I built a simple MLP (Multilayer Perceptron), which I followed with a CNN (Convolutional Neural Network).
+While Logistic Regression is not a neural network, since it consists of only one node that accepts inputs that are then weighted and sent to the sigmoid  function which outputs the probabilities, it is an excellent benchmark for future development. By exploring a linear classifier first, I am able to see how utilizing more complex architectures affects the results of the classification.
+
+#### Logistic Regression
+The Logistic Regression code can be found in the _neural_networks.py_ file, since I will be comparing its results with the performance of my MLP and CNN.
+While initially I was exploring various parameters, after a few experiments, I have decided to use the default configurations which are the following:
+```
+@dataclass(frozen=True)
+class LogisticRegressionConfig:
+    random_state: int = 42
+    class_weight: str = None  # 'balanced'
+    solver: str = 'lbfgs'  # 'newton-cholesky'
+    penalty: str = 'l2'
+    max_iter: int = 100
+```
+
+#### Multilayer Perceptron (MLP)
+The used MLP consists of four _Dense_ layers with the last one being the classification layer. The number of nodes is decreasing as we get deeper into the network. The architecture is deliberatly kept small to see how a relatively lightweight model performs against Logistic Regression and later a CNN.
+```
+input_main = Input(shape=(29,))
+
+main_branch = Dense(64, activation=relu)(input_main)
+main_branch = Dense(32, activation=relu)(main_branch)
+main_branch = Dense(16, activation=relu)(main_branch)
+softmax_out = Dense(2, activation=softmax)(main_branch)
+```
+
+#### Convolutional Neural Network (CNN)
+
+**1. Regular CNN**
+**2. Attention CNN**
+
+
+## Experiments
+
+### Choosing the hyperparameters for the CNN
+
+| Model  | Val Loss                | Val Acc [%]                | F1                      | Recall                  | Precision               | Avg precision           | Roc/AUC                 |                                         |
+|--------|-------------------------|----------------------------|-------------------------|-------------------------|-------------------------|-------------------------|-------------------------|-----------------------------------------|
+| LR1    | 0.004                   | 99.9255%                   | 0.764                   | 0.6939                  | 0.85                    | 0.7933                  | 0.9879                  |                                         |
+| MLP    | 0.003 <br>(std 0.0003)  | 99.9383%<br>(std 0.0099%)  | 0.8025 <br>(std 0.0404) | 0.7306 <br>(std 0.0746) | 0.8975 <br>(std 0.029)  | 0.8519 <br>(std 0.0134) | 0.9848 <br>(std 0.0067) |                                         |
+| CNN1   | 0.0028<br>(std 0.0002)  | 99.9277% <br>(std 0.0146%) | 0.7564 <br>(std 0.0737) | 0.6694 <br>(std 0.1193) | 0.8923 <br>(std 0.0317) | 0.8368 <br>(std 0.0095) | 0.9943 <br>(std 0.0021) | second conv1 <br>layer padding is valid |
+| CNN2   | 0.003 <br>(std  0.0004) | 99.9383% <br>(std 0.0062%) | 0.8091 <br>(std 0.0226) | 0.7551 <br>(std 0.0428) | 0.8738 <br>(std 0.0234) | 0.829 <br>(std 0.0336)  | 0.9899 <br>(std 0.0031) | second conv1 <br>layer padding is valid |
+| CNN3   | 0.0033 <br>(std 0.0005) | 99.9447% <br>(std 0.0053%) | 0.8343 <br>(std 0.0184) | 0.8041 <br>(std 0.044)  | 0.8702 <br>(std 0.0316) | 0.8126 <br>(std 0.0413) | 0.992 <br>(std 0.004)   | second conv1 <br>layer padding is valid |
+| CNN4   | 0.0031 <br>(std 0.0005) | 99.9418% <br>(std 0.0043%) | 0.8234 <br>(std 0.0185) | 0.7837 <br>(std 0.0493) | 0.8717 <br>(std 0.0322) | 0.8337 <br>(std 0.0286) | 0.9928 <br>(std 0.0029) | second conv1 <br>layer padding is valid |
+| CNN5   | 0.0031<br>(std 0.0005)  | 99.939%<br>(std 0.0057%)   | 0.8069<br>(std 0.0259)  | 0.7388<br>(std 0.0597)  | 0.8951<br>(std 0.0341)  | 0.8413<br>(std 0.0227)  | 0.9944<br>(std 0.0011)  | second conv1 <br>layer padding is valid |
+| CNN1_2 | 0.0035<br>(std 0.0003)  | 99.9362%<br>(std 0.0125%)  | 0.7937<br>(std 0.0639)  | 0.7306<br>(std 0.1143)  | 0.8901<br>(std 0.0446)  | 0.8168<br>(std 0.0186)  | 0.9673<br>(std 0.009)   | second conv1 <br>layer padding is same  |
+| CNN2_2 | 0.0044<br>(std 0.0012)  | 99.9376%<br>(std 0.0058%)  | 0.8026<br>(std 0.03)    | 0.7388<br>(std 0.0723)  | 0.8884<br>(std 0.0423)  | 0.8125<br>(std 0.0176(  | 0.9658<br>(std 0.0108)  | second conv1 <br>layer padding is same  |
+| CNN3_2 | 0.0034<br>(std 0.0005)  | 99.9347%<br>(std 0.0122%)  | 0.8126<br>(std 0.0242)  | 0.8082<br>(std 0.0332)  | 0.8222<br>(std 0.0623)  | 0.776<br>(std 0.0608)   | 0.9801<br>(std 0.0102)  | second conv1 <br>layer padding is same  |
+| CNN4_2 | 0.0044<br>(std 0.001)   | 99.9347%<br>(std 0.0069%)  | 0.8179<br>(std 0.0109)  | 0.8408<br>(std 0.0327)  | 0.7995<br>(std 0.0433)  | 0.6928<br>(std 0.0157)  | 0.9623<br>(std 0.0211)  | second conv1 <br>layer padding is same  |
+| CNN5_2 | 0.0042<br>(std 0.0014)  | 99.939%<br>(std 0.0094%)   | 0.8144<br>(std 0.0393)  | 0.7796<br>(std 0.0735)  | 0.8585<br>(std 0.0244)  | 0.8013<br>(std 0.0174)  | 0.9763<br>(std 0.0113)  | second conv1 <br>layer padding is same  |
+
+
+Although, the dataset is extremely imbalanced, one can notice, that I am not modifying the class weights in any of my models. During my experiements, I ran multiple tests with balanced weights and with the defaults settings as well. After comparing the results, I decided to continue this project with the default weights. The reason behind this, is the recall-precision trade-off. While introducing balancing techniques to make up for the imbalance in the data increased the recall quite substantially, the precision dropped drastically which heavily affected the classification. Because the objective of this project is tied to a real-life problem, it is important to maintain the balance between the two metrics. Of course, this type of balance is always crucial, but in this scenario it becomes imperative since both cases - missing fraudulent transactions as well as classifying too many legitimate transactions as fraudulent - may bring forward expenses and inconvenience for both users and the company employing the fraud detection techniques.
 
 
 
