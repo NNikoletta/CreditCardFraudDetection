@@ -5,7 +5,7 @@ from src.config import raw_data_dir, DataValidationConfig
 config = DataValidationConfig()
 
 
-def validate_dataset():
+def validate_dataset() -> None:
     print("Begin validation of data...")
     file_path = raw_data_dir/config.raw_data_file
     if not file_path.is_file():  # checking if the file exists

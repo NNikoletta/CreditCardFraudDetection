@@ -6,6 +6,13 @@ from dotenv import load_dotenv
 
 
 @dataclass(frozen=True)
+class SplitConfig:
+    split_id: str = "fixed_split_v1"
+    split_seed: int = 19082026
+    test_fraction: float = 0.10
+    validation_fraction: float = 0.10
+
+@dataclass(frozen=True)
 class TrainingConfig:
     batch_size: int = 16
     epochs: int = 5
@@ -50,6 +57,7 @@ load_dotenv()
 
 project_root = Path(__file__).resolve().parents[1]
 raw_data_dir = project_root / "data" / "raw"
+split_dir = project_root / "data" / "splits"
 
 kaggle_username = os.getenv("KAGGLE_USERNAME")
 kaggle_key = os.getenv("KAGGLE_KEY")

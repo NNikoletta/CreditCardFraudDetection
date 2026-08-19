@@ -1,0 +1,26 @@
+{
+  "split_id": "fixed_split_v1",
+  "strategy": "stratified_random",
+  "split_seed": 19082026,
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "sample_counts": {
+    "train": 227845,
+    "valid": 28481,
+    "test": 28481
+  },
+  "class_counts": {
+    "train": {
+      "0": 227451,
+      "1": 394
+    },
+    "valid": {
+      "0": 28432,
+      "1": 49
+    },
+    "test": {
+      "0": 28432,
+      "1": 49
+    }
+  }
+}
