@@ -100,23 +100,6 @@ softmax_out = Dense(2, activation=softmax)(main_branch)
 
 ## Experiments
 
-### Choosing the hyperparameters for the CNN
-
-| Model  | Val Loss                | Val Acc [%]                | F1                      | Recall                  | Precision               | Avg precision           | Roc/AUC                 |                                         |
-|--------|-------------------------|----------------------------|-------------------------|-------------------------|-------------------------|-------------------------|-------------------------|-----------------------------------------|
-| LR1    | 0.004                   | 99.9255%                   | 0.764                   | 0.6939                  | 0.85                    | 0.7933                  | 0.9879                  |                                         |
-| MLP    | 0.003 <br>(std 0.0003)  | 99.9383%<br>(std 0.0099%)  | 0.8025 <br>(std 0.0404) | 0.7306 <br>(std 0.0746) | 0.8975 <br>(std 0.029)  | 0.8519 <br>(std 0.0134) | 0.9848 <br>(std 0.0067) |                                         |
-| CNN1   | 0.0028<br>(std 0.0002)  | 99.9277% <br>(std 0.0146%) | 0.7564 <br>(std 0.0737) | 0.6694 <br>(std 0.1193) | 0.8923 <br>(std 0.0317) | 0.8368 <br>(std 0.0095) | 0.9943 <br>(std 0.0021) | second conv1 <br>layer padding is valid |
-| CNN2   | 0.003 <br>(std  0.0004) | 99.9383% <br>(std 0.0062%) | 0.8091 <br>(std 0.0226) | 0.7551 <br>(std 0.0428) | 0.8738 <br>(std 0.0234) | 0.829 <br>(std 0.0336)  | 0.9899 <br>(std 0.0031) | second conv1 <br>layer padding is valid |
-| CNN3   | 0.0033 <br>(std 0.0005) | 99.9447% <br>(std 0.0053%) | 0.8343 <br>(std 0.0184) | 0.8041 <br>(std 0.044)  | 0.8702 <br>(std 0.0316) | 0.8126 <br>(std 0.0413) | 0.992 <br>(std 0.004)   | second conv1 <br>layer padding is valid |
-| CNN4   | 0.0031 <br>(std 0.0005) | 99.9418% <br>(std 0.0043%) | 0.8234 <br>(std 0.0185) | 0.7837 <br>(std 0.0493) | 0.8717 <br>(std 0.0322) | 0.8337 <br>(std 0.0286) | 0.9928 <br>(std 0.0029) | second conv1 <br>layer padding is valid |
-| CNN5   | 0.0031<br>(std 0.0005)  | 99.939%<br>(std 0.0057%)   | 0.8069<br>(std 0.0259)  | 0.7388<br>(std 0.0597)  | 0.8951<br>(std 0.0341)  | 0.8413<br>(std 0.0227)  | 0.9944<br>(std 0.0011)  | second conv1 <br>layer padding is valid |
-| CNN1_2 | 0.0035<br>(std 0.0003)  | 99.9362%<br>(std 0.0125%)  | 0.7937<br>(std 0.0639)  | 0.7306<br>(std 0.1143)  | 0.8901<br>(std 0.0446)  | 0.8168<br>(std 0.0186)  | 0.9673<br>(std 0.009)   | second conv1 <br>layer padding is same  |
-| CNN2_2 | 0.0044<br>(std 0.0012)  | 99.9376%<br>(std 0.0058%)  | 0.8026<br>(std 0.03)    | 0.7388<br>(std 0.0723)  | 0.8884<br>(std 0.0423)  | 0.8125<br>(std 0.0176(  | 0.9658<br>(std 0.0108)  | second conv1 <br>layer padding is same  |
-| CNN3_2 | 0.0034<br>(std 0.0005)  | 99.9347%<br>(std 0.0122%)  | 0.8126<br>(std 0.0242)  | 0.8082<br>(std 0.0332)  | 0.8222<br>(std 0.0623)  | 0.776<br>(std 0.0608)   | 0.9801<br>(std 0.0102)  | second conv1 <br>layer padding is same  |
-| CNN4_2 | 0.0044<br>(std 0.001)   | 99.9347%<br>(std 0.0069%)  | 0.8179<br>(std 0.0109)  | 0.8408<br>(std 0.0327)  | 0.7995<br>(std 0.0433)  | 0.6928<br>(std 0.0157)  | 0.9623<br>(std 0.0211)  | second conv1 <br>layer padding is same  |
-| CNN5_2 | 0.0042<br>(std 0.0014)  | 99.939%<br>(std 0.0094%)   | 0.8144<br>(std 0.0393)  | 0.7796<br>(std 0.0735)  | 0.8585<br>(std 0.0244)  | 0.8013<br>(std 0.0174)  | 0.9763<br>(std 0.0113)  | second conv1 <br>layer padding is same  |
-
 
 Although, the dataset is extremely imbalanced, one can notice, that I am not modifying the class weights in any of my models. During my experiements, I ran multiple tests with balanced weights and with the defaults settings as well. After comparing the results, I decided to continue this project with the default weights. The reason behind this, is the recall-precision trade-off. While introducing balancing techniques to make up for the imbalance in the data increased the recall quite substantially, the precision dropped drastically which heavily affected the classification. Because the objective of this project is tied to a real-life problem, it is important to maintain the balance between the two metrics. Of course, this type of balance is always crucial, but in this scenario it becomes imperative since both cases - missing fraudulent transactions as well as classifying too many legitimate transactions as fraudulent - may bring forward expenses and inconvenience for both users and the company employing the fraud detection techniques.
 
