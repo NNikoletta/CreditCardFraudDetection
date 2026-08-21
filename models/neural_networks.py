@@ -7,14 +7,14 @@ from keras.layers import Conv1D
 from keras.layers import Flatten
 from keras.metrics import BinaryAccuracy
 
-from src.config import TrainingConfig, keras_random_seed
+from src.config import TrainingConfig
 from models.attention import AttributeAttention
-
-keras.utils.set_random_seed(keras_random_seed)
 
 
 class Network:
     def __init__(self, config: TrainingConfig):
+        keras.utils.set_random_seed(config.keras_random_seed)
+
         self.batch_size = config.batch_size
         self.epochs = config.epochs
         self.threshold = config.threshold

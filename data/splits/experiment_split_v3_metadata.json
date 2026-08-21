@@ -1,0 +1,29 @@
+{
+  "split_id": "experiment_split_v3",
+  "strategy": "stratified_random",
+  "split_seed": [
+    21082026,
+    51082027
+  ],
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "sample_counts": {
+    "train": 227845,
+    "validation": 28481,
+    "test": 28481
+  },
+  "class_counts": {
+    "train": {
+      "0": 227451,
+      "1": 394
+    },
+    "validation": {
+      "0": 28432,
+      "1": 49
+    },
+    "test": {
+      "0": 28432,
+      "1": 49
+    }
+  }
+}

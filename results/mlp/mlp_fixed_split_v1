@@ -1,0 +1,40 @@
+{
+  "run_id": "mlp_fixed_split_v1",
+  "model_name": "mlp",
+  "split_id": "fixed_split_v1",
+  "split_seed": [
+    21082026,
+    21082027
+  ],
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "model_configuration": {
+    "batch_size": 16,
+    "epochs": 5,
+    "threshold": 0.5,
+    "keras_random_seed": 400
+  },
+  "results": {
+    "loss": 0.002,
+    "accuracy": 99.961,
+    "f1": 0.879,
+    "recall": 0.816,
+    "precision": 0.952,
+    "avg_precision": 0.879,
+    "roc_auc": 0.973
+  },
+  "runtime_seconds": {
+    "training_time": 135.0683687,
+    "prediction_time": 1.3436889999999835
+  },
+  "confusion_matrix": [
+    [
+      28430,
+      2
+    ],
+    [
+      9,
+      40
+    ]
+  ]
+}

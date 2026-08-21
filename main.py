@@ -1,19 +1,29 @@
-from src.load_data import download_dataset, load_dataset
-from src.data_splits import load_split
-from src.preprocess import prepare_data, standardize
-from src.config import SplitConfig
+from src.data_pipeline import load_experiment_data, create_experiment_split
+from src.config import SplitConfig, TrainingConfig
 
-from src.model_selection import select_and_run_model
+from src.model_selection import Model
 
 
 def main() -> None:
+    # test_seed = 21082026
+    # validation_seed = [31082027,
+    #                    41082027,
+    #                    51082027,
+    #                    61082027,
+    #                    71082027]
+    #
+    # for run in range(0, len(validation_seed)):
+    #     experiment_split = SplitConfig(f"experiment_split_v{run+1}",
+    #                                    split_seed=(test_seed, validation_seed[run]),
+    #                                    test_fraction=0.10,
+    #                                    validation_fraction=0.10)
+    #     create_experiment_split(experiment_split)
+
     split_config = SplitConfig()
-    download_dataset()
-    x, y = load_dataset()
-    train_indices, validation_indices, test_indices = load_split(split_config.split_id, y)
-    development_data, test_data = prepare_data(x, y, train_indices, validation_indices, test_indices)
-    scaler, development_data = standardize(development_data)
-    select_and_run_model("mlp", development_data)
+    model = Model("mlp", split_config)
+    model.create_model()
+    model.run_model()
+    model.save_results()
 
 
 if __name__ == "__main__":

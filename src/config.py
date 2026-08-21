@@ -5,9 +5,6 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 
 
-keras_random_seed = 400
-
-
 @dataclass(frozen=True)
 class SplitConfig:
     split_id: str = "fixed_split_v1"
@@ -21,6 +18,7 @@ class TrainingConfig:
     batch_size: int = 16
     epochs: int = 5
     threshold: float = 0.5
+    keras_random_seed: int = 400
 
 
 @dataclass(frozen=True)
@@ -63,6 +61,7 @@ load_dotenv()
 project_root = Path(__file__).resolve().parents[1]
 raw_data_dir = project_root / "data" / "raw"
 split_dir = project_root / "data" / "splits"
+results_dir = project_root / "results"
 
 kaggle_username = os.getenv("KAGGLE_USERNAME")
 kaggle_key = os.getenv("KAGGLE_KEY")
