@@ -1,7 +1,10 @@
 {
   "split_id": "fixed_split_v1",
   "strategy": "stratified_random",
-  "split_seed": 19082026,
+  "split_seed": [
+    21082026,
+    21082027
+  ],
   "test_fraction": 0.1,
   "validation_fraction": 0.1,
   "sample_counts": {

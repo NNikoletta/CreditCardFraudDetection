@@ -11,14 +11,14 @@ def create_split_indices(y: np.ndarray, config: SplitConfig) -> tuple[np.ndarray
 
     development_indices, test_indices = train_test_split(all_indices,
                                                          test_size=config.test_fraction,
-                                                         random_state=config.split_seed,
+                                                         random_state=config.split_seed[0],
                                                          stratify=y)
 
     relative_valid_fraction = config.validation_fraction/(1-config.test_fraction)
 
     train_indices, validation_indices = train_test_split(development_indices,
                                                          test_size=relative_valid_fraction,
-                                                         random_state=config.split_seed + 1,
+                                                         random_state=config.split_seed[1],
                                                          stratify=y[development_indices])
 
     return train_indices, validation_indices, test_indices
@@ -70,7 +70,7 @@ def save_split(y: np.ndarray, train_indices: np.ndarray, validation_indices: np.
         }
     }
 
-    print("Split was saved successfully")
+    print("Split was saved successfully.")
 
     with metadata_path.open("w", encoding="utf-8") as json_file:
         json.dump(metadata, json_file, indent=2)

@@ -5,17 +5,22 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 
 
+keras_random_seed = 400
+
+
 @dataclass(frozen=True)
 class SplitConfig:
     split_id: str = "fixed_split_v1"
-    split_seed: int = 19082026
+    split_seed: tuple[int, int] = (21082026, 21082027)
     test_fraction: float = 0.10
     validation_fraction: float = 0.10
+
 
 @dataclass(frozen=True)
 class TrainingConfig:
     batch_size: int = 16
     epochs: int = 5
+    threshold: float = 0.5
 
 
 @dataclass(frozen=True)

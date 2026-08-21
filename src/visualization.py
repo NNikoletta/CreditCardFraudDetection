@@ -1,10 +1,11 @@
+import numpy as np
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def visualize(y_test, predicted_classes):
+def visualize(y_test, predicted_classes) -> np.ndarray[np.ndarray]:
     conf_matr = confusion_matrix(y_test, predicted_classes)
     cm = pd.DataFrame(conf_matr,
                       columns=['(0) \n Legitimate', '(1) \n Fraud'],
