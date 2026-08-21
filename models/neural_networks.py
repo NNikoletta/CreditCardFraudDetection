@@ -5,7 +5,7 @@ from keras.models import Model
 from keras.layers import Dense, Input, Reshape
 from keras.layers import Conv1D
 from keras.layers import Flatten
-from keras.metrics import CategoricalAccuracy
+from keras.metrics import BinaryAccuracy
 
 from src.config import TrainingConfig, keras_random_seed
 from models.attention import AttributeAttention
@@ -28,7 +28,7 @@ class Network:
         )
 
     def train(self, x_train, x_valid, y_train, y_valid) -> None:
-        metrics = [CategoricalAccuracy(name='accuracy')]
+        metrics = [BinaryAccuracy(name='accuracy', threshold=self.threshold)]
         self.model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),
                            metrics=metrics)
         self.model.summary()
@@ -36,7 +36,7 @@ class Network:
                        epochs=self.epochs, verbose=1, validation_data=(x_valid, y_valid))
 
     def predict(self, x_test) -> tuple[np.ndarray, np.ndarray]:
-        predicted_probabilities = self.model.predict(x_test)
+        predicted_probabilities = self.model.predict(x_test).ravel()
         predicted_classes = (predicted_probabilities > self.threshold).astype('int')
         return predicted_classes, predicted_probabilities
 
@@ -70,11 +70,12 @@ class CNN(Network):
         input_main = Input(shape=(29,))
         reshaped_main = Reshape((29, 1))(input_main)
 
-        main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
-        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
+        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
+        main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
         main_branch = Flatten()(main_branch)
 
-        main_branch = Dense(16, activation=relu)(main_branch)
+        main_branch = Dense(4, activation=relu)(main_branch)
+        # main_branch = Dense(8, activation=relu)(main_branch)
         sigmoid_out = Dense(1, activation=sigmoid)(main_branch)
 
         self.model = Model(inputs=input_main, outputs=sigmoid_out)

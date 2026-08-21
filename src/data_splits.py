@@ -36,9 +36,8 @@ def save_split(y: np.ndarray, train_indices: np.ndarray, validation_indices: np.
     metadata_path = split_dir/f"{config.split_id}_metadata.json"
 
     if indices_path.exists() or metadata_path.exists():
-        raise FileExistsError(
-            f"The '{config.split_id}' split already exists and will not be overwritten."
-        )
+        print(f"The '{config.split_id}' split already exists and will not be overwritten.")
+        return
 
     np.savez_compressed(str(indices_path),
                         train_indices=train_indices,
@@ -77,6 +76,7 @@ def save_split(y: np.ndarray, train_indices: np.ndarray, validation_indices: np.
 
 
 def load_split(split_id: str, y: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    print("Loading saved split.")
     indices_path = split_dir/f"{split_id}.npz"
 
     if not indices_path.is_file():
@@ -101,6 +101,8 @@ def load_split(split_id: str, y: np.ndarray) -> tuple[np.ndarray, np.ndarray, np
         train_indices = split["train_indices"]
         validation_indices = split["validation_indices"]
         test_indices = split["test_indices"]
+
+    print("Split loaded successfully.")
 
     validate_split(y, train_indices, validation_indices, test_indices)
 
