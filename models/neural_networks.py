@@ -90,19 +90,24 @@ class CNN(Network):
 
 
 class AttentionCNN(Network):
-    def __init__(self, config: TrainingConfig):
+    def __init__(self, config: CNNConfig):
         super().__init__(config)
+        self.config = config
 
     def build_model(self):
         input_main = Input(shape=(29,))
         reshaped_main = Reshape((29, 1))(input_main)
 
-        main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
-        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
+        main_branch = Conv1D(self.config.filters[0], kernel_size=self.config.kernel_size[0],
+                             strides=self.config.strides[0], padding=self.config.padding[0],
+                             activation=relu)(reshaped_main)
+        main_branch = Conv1D(self.config.filters[1], kernel_size=self.config.kernel_size[1],
+                             strides=self.config.strides[1], padding=self.config.padding[1],
+                             activation=relu)(main_branch)
         main_branch = AttributeAttention(kernel_size=2)(main_branch)
         main_branch = Flatten()(main_branch)
 
-        main_branch = Dense(32, activation=relu)(main_branch)
+        main_branch = Dense(self.config.fc_units[0], activation=relu)(main_branch)
         sigmoid_out = Dense(1, activation=sigmoid)(main_branch)
 
         self.model = Model(inputs=input_main, outputs=sigmoid_out)

@@ -1,0 +1,52 @@
+{
+  "model_name": "xgboost",
+  "model_configuration": {
+    "learning_rate": 0.1,
+    "n_estimators": 100,
+    "max_depth": 3,
+    "random_state": 42,
+    "gamma": 0,
+    "min_child_weight": 1,
+    "ratio": 1
+  },
+  "avg_results": {
+    "loss_avg_std": [
+      0.002628265513311148,
+      0.00026280445181314896
+    ],
+    "accuracy_avg_std": [
+      99.9536533127348,
+      0.008714352477785941
+    ],
+    "f1_avg_std": [
+      0.8515793633412567,
+      0.02961682688643776
+    ],
+    "recall_avg_std": [
+      0.7755102040816327,
+      0.04653777245302604
+    ],
+    "precision_avg_std": [
+      0.9477899877899878,
+      0.04303315522000965
+    ],
+    "avg_precision_avg_std": [
+      0.8448988033073542,
+      0.01992550627280271
+    ],
+    "roc_auc_avg_std": [
+      0.9792433504071296,
+      0.011858354565363865
+    ]
+  },
+  "runtime_seconds_avg": {
+    "training_time_avg_std": [
+      3.4605978800000003,
+      0.23326930311741798
+    ],
+    "prediction_time_avg_std": [
+      0.052919339999998274,
+      0.0060472546361480745
+    ]
+  }
+}

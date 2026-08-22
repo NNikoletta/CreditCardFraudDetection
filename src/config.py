@@ -23,12 +23,12 @@ class TrainingConfig:
 
 @dataclass(frozen=True)
 class CNNConfig(TrainingConfig):
-    candidate_id: int = 1
-    filters: tuple[int, int] = (8, 16)
-    kernel_size: tuple[int, int] = (29, 29)
-    strides: tuple[int, int] = (1, 1)
-    padding: tuple[str, str] = ('same', 'same')
-    fc_units: tuple[int, int] = (4, None)
+    candidate_id: int = 0
+    filters: tuple[int, ...] = (8, 16)
+    kernel_size: tuple[int, ...] = (29, 29)
+    strides: tuple[int, ...] = (1, 1)
+    padding: tuple[str, ...] = ('same', 'same')
+    fc_units: tuple[int, ...] = (4,)
 
 
 @dataclass(frozen=True)

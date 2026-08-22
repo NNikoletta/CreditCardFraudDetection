@@ -1,0 +1,43 @@
+{
+  "run_id": "xgboost_experiment_split_v5.json",
+  "model_name": "xgboost",
+  "split_id": "experiment_split_v5",
+  "split_seed": [
+    21082026,
+    71082027
+  ],
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "model_configuration": {
+    "learning_rate": 0.1,
+    "n_estimators": 100,
+    "max_depth": 3,
+    "random_state": 42,
+    "gamma": 0,
+    "min_child_weight": 1,
+    "ratio": 1
+  },
+  "results": {
+    "loss": 0.00258691022021877,
+    "accuracy": 99.9438221972543,
+    "f1": 0.8181818181818182,
+    "recall": 0.7346938775510204,
+    "precision": 0.9230769230769231,
+    "avg_precision": 0.8501320665643891,
+    "roc_auc": 0.9912623603183536
+  },
+  "runtime_seconds": {
+    "training_time": 3.552036000000001,
+    "prediction_time": 0.05047979999999086
+  },
+  "confusion_matrix": [
+    [
+      28429,
+      3
+    ],
+    [
+      13,
+      36
+    ]
+  ]
+}

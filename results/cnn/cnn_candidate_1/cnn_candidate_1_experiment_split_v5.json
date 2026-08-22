@@ -1,10 +1,10 @@
 {
-  "run_id": "cnn_candidate_1_fixed_split_v1",
+  "run_id": "cnn_candidate_1_experiment_split_v5.json",
   "model_name": "cnn",
-  "split_id": "fixed_split_v1",
+  "split_id": "experiment_split_v5",
   "split_seed": [
     21082026,
-    21082027
+    71082027
   ],
   "test_fraction": 0.1,
   "validation_fraction": 0.1,
@@ -15,8 +15,8 @@
     "keras_random_seed": 400,
     "candidate_id": 1,
     "filters": [
-      8,
-      16
+      2,
+      4
     ],
     "kernel_size": [
       29,
@@ -28,34 +28,33 @@
     ],
     "padding": [
       "same",
-      "same"
+      "valid"
     ],
     "fc_units": [
-      4,
-      null
+      4
     ]
   },
   "results": {
-    "loss": 0.003636365057900548,
-    "accuracy": 99.94031190872192,
-    "f1": 0.8247422680412371,
-    "recall": 0.8163265306122449,
-    "precision": 0.8333333333333334,
-    "avg_precision": 0.7824587849072351,
-    "roc_auc": 0.965770459844039
+    "loss": 0.002786194207146764,
+    "accuracy": 99.93680119514465,
+    "f1": 0.7857142857142857,
+    "recall": 0.673469387755102,
+    "precision": 0.9428571428571428,
+    "avg_precision": 0.8462482724121986,
+    "roc_auc": 0.9909795516405775
   },
   "runtime_seconds": {
-    "training_time": 283.5779132,
-    "prediction_time": 2.1747578999999746
+    "training_time": 250.76968179999994,
+    "prediction_time": 1.8384148000000096
   },
   "confusion_matrix": [
     [
-      28424,
-      8
+      28430,
+      2
     ],
     [
-      9,
-      40
+      16,
+      33
     ]
   ]
 }

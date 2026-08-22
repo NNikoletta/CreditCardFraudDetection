@@ -88,12 +88,12 @@ class Model:
                         'runtime_seconds': runtime}
         return self.model, self.metrics
 
-    def save_results(self) -> None:
+    def save_results(self) -> dict or None:
         results_folder_path = results_dir/self.model_name
-        run_id = f"{self.model_name}_{self.split_config.split_id}"
+        run_id = f"{self.model_name}_{self.split_config.split_id}.json"
         if self.model_name == "cnn" or self.model_name == "attention_cnn":
-            results_folder_path = results_folder_path/f"{self.model_name}_{self.split_config.split_id}"
-            run_id = f"{self.model_name}_candidate_{self.config.candidate_id}_{self.split_config.split_id}"
+            results_folder_path = results_folder_path/f"{self.model_name}_candidate_{self.config.candidate_id}"
+            run_id = f"{self.model_name}_candidate_{self.config.candidate_id}_{self.split_config.split_id}.json"
         ensure_dir(results_folder_path)
         file_path = results_folder_path/run_id
 
@@ -126,3 +126,5 @@ class Model:
 
         with file_path.open("w", encoding="utf-8") as json_file:
             json.dump(results_data, json_file, indent=2)
+
+        return results_data
