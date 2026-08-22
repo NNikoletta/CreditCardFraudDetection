@@ -7,7 +7,7 @@ from keras.layers import Conv1D
 from keras.layers import Flatten
 from keras.metrics import BinaryAccuracy
 
-from src.config import TrainingConfig
+from src.config import TrainingConfig, CNNConfig
 from models.attention import AttributeAttention
 
 
@@ -15,11 +15,13 @@ class Network:
     def __init__(self, config: TrainingConfig):
         keras.utils.set_random_seed(config.keras_random_seed)
 
+        self.config = config
         self.batch_size = config.batch_size
         self.epochs = config.epochs
         self.threshold = config.threshold
         self.model = keras.Sequential()
         self.class_weight = None
+
         self.build_model()
 
     def build_model(self):
@@ -63,18 +65,23 @@ class MLP(Network):
 
 
 class CNN(Network):
-    def __init__(self, config: TrainingConfig):
+    def __init__(self, config: CNNConfig):
         super().__init__(config)
+        self.config = config
 
     def build_model(self):
         input_main = Input(shape=(29,))
         reshaped_main = Reshape((29, 1))(input_main)
 
-        main_branch = Conv1D(16, kernel_size=29, strides=1, padding='same', activation=relu)(reshaped_main)
-        main_branch = Conv1D(8, kernel_size=29, strides=1, padding='same', activation=relu)(main_branch)
+        main_branch = Conv1D(self.config.filters[0], kernel_size=self.config.kernel_size[0],
+                             strides=self.config.strides[0], padding=self.config.padding[0],
+                             activation=relu)(reshaped_main)
+        main_branch = Conv1D(self.config.filters[1], kernel_size=self.config.kernel_size[1],
+                             strides=self.config.strides[1], padding=self.config.padding[1],
+                             activation=relu)(main_branch)
         main_branch = Flatten()(main_branch)
 
-        main_branch = Dense(4, activation=relu)(main_branch)
+        main_branch = Dense(self.config.fc_units[0], activation=relu)(main_branch)
         # main_branch = Dense(8, activation=relu)(main_branch)
         sigmoid_out = Dense(1, activation=sigmoid)(main_branch)
 

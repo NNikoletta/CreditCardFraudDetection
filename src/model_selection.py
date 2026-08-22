@@ -5,7 +5,7 @@ from dataclasses import asdict
 from models.linear import LogisticRegressionModel
 from models.neural_networks import MLP, CNN, AttentionCNN
 from models.decision_trees import XGBoostModel
-from src.config import LogisticRegressionConfig, TrainingConfig, XGBoostConfig, SplitConfig, results_dir
+from src.config import LogisticRegressionConfig, TrainingConfig, CNNConfig, XGBoostConfig, SplitConfig, results_dir
 from src.data_pipeline import load_experiment_data
 from src.metrics import calculate_metrics
 from src.visualization import visualize
@@ -14,8 +14,8 @@ from src.utils import ensure_dir
 MODEL_REGISTRY = {
     'logistic_regression': (LogisticRegressionModel, LogisticRegressionConfig),
     'mlp': (MLP, TrainingConfig),
-    'cnn': (CNN, TrainingConfig),
-    'attention_cnn': (AttentionCNN, TrainingConfig),
+    'cnn': (CNN, CNNConfig),
+    'attention_cnn': (AttentionCNN, CNNConfig),
     'xgboost': (XGBoostModel, XGBoostConfig)
 }
 
@@ -90,9 +90,16 @@ class Model:
 
     def save_results(self) -> None:
         results_folder_path = results_dir/self.model_name
-        ensure_dir(results_folder_path)
         run_id = f"{self.model_name}_{self.split_config.split_id}"
+        if self.model_name == "cnn" or self.model_name == "attention_cnn":
+            results_folder_path = results_folder_path/f"{self.model_name}_{self.split_config.split_id}"
+            run_id = f"{self.model_name}_candidate_{self.config.candidate_id}_{self.split_config.split_id}"
+        ensure_dir(results_folder_path)
         file_path = results_folder_path/run_id
+
+        if file_path.is_file():
+            print(f"Experimental run '{run_id}' already exists and will not be overwritten.")
+            return
 
         results_data = {'run_id': run_id,
                         'model_name': self.model_name,
@@ -102,8 +109,8 @@ class Model:
                         'validation_fraction': self.split_config.validation_fraction,
                         'model_configuration': asdict(self.config),
                         'results': {
-                            'loss': round(self.metrics['basic_metrics']['loss'], ndigits=3),
-                            'accuracy': round(self.metrics['basic_metrics']["accuracy"] * 100, ndigits=3),
+                            'loss': self.metrics['basic_metrics']['loss'],
+                            'accuracy': self.metrics['basic_metrics']["accuracy"] * 100,
                             'f1': self.metrics['calculated_metrics']['f1'],
                             'recall': self.metrics['calculated_metrics']['recall'],
                             'precision': self.metrics['calculated_metrics']['precision'],

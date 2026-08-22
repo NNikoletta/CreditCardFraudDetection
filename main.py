@@ -20,7 +20,7 @@ def main() -> None:
     #     create_experiment_split(experiment_split)
 
     split_config = SplitConfig()
-    model = Model("mlp", split_config)
+    model = Model("cnn", split_config)
     model.create_model()
     model.run_model()
     model.save_results()

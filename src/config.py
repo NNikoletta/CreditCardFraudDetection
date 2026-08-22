@@ -22,6 +22,16 @@ class TrainingConfig:
 
 
 @dataclass(frozen=True)
+class CNNConfig(TrainingConfig):
+    candidate_id: int = 1
+    filters: tuple[int, int] = (8, 16)
+    kernel_size: tuple[int, int] = (29, 29)
+    strides: tuple[int, int] = (1, 1)
+    padding: tuple[str, str] = ('same', 'same')
+    fc_units: tuple[int, int] = (4, None)
+
+
+@dataclass(frozen=True)
 class LogisticRegressionConfig:
     random_state: int = 42
     class_weight: str = None  # default = None, other = 'balanced'

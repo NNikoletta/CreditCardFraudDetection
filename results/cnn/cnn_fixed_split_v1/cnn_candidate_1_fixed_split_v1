@@ -1,0 +1,61 @@
+{
+  "run_id": "cnn_candidate_1_fixed_split_v1",
+  "model_name": "cnn",
+  "split_id": "fixed_split_v1",
+  "split_seed": [
+    21082026,
+    21082027
+  ],
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "model_configuration": {
+    "batch_size": 16,
+    "epochs": 5,
+    "threshold": 0.5,
+    "keras_random_seed": 400,
+    "candidate_id": 1,
+    "filters": [
+      8,
+      16
+    ],
+    "kernel_size": [
+      29,
+      29
+    ],
+    "strides": [
+      1,
+      1
+    ],
+    "padding": [
+      "same",
+      "same"
+    ],
+    "fc_units": [
+      4,
+      null
+    ]
+  },
+  "results": {
+    "loss": 0.003636365057900548,
+    "accuracy": 99.94031190872192,
+    "f1": 0.8247422680412371,
+    "recall": 0.8163265306122449,
+    "precision": 0.8333333333333334,
+    "avg_precision": 0.7824587849072351,
+    "roc_auc": 0.965770459844039
+  },
+  "runtime_seconds": {
+    "training_time": 283.5779132,
+    "prediction_time": 2.1747578999999746
+  },
+  "confusion_matrix": [
+    [
+      28424,
+      8
+    ],
+    [
+      9,
+      40
+    ]
+  ]
+}

@@ -16,17 +16,17 @@
     "max_iter": 100
   },
   "results": {
-    "loss": 0.004,
-    "accuracy": 99.909,
-    "f1": 0.667,
-    "recall": 0.531,
-    "precision": 0.897,
-    "avg_precision": 0.783,
-    "roc_auc": 0.977
+    "loss": 0.0036733359239597696,
+    "accuracy": 99.90871107053826,
+    "f1": 0.6666666666666666,
+    "recall": 0.5306122448979592,
+    "precision": 0.896551724137931,
+    "avg_precision": 0.7832805698766343,
+    "roc_auc": 0.9768498845796056
   },
   "runtime_seconds": {
-    "training_time": 0.8245286999999983,
-    "prediction_time": 0.006979599999997532
+    "training_time": 0.8315935999999979,
+    "prediction_time": 0.006448299999998852
   },
   "confusion_matrix": [
     [
