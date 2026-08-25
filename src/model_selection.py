@@ -59,6 +59,17 @@ class Model:
         else:
             development_data = experiment_data.scaled_development
 
+        results_folder_path = results_dir/self.model_name
+        run_id = f"{self.model_name}_{self.split_config.split_id}.json"
+        if self.model_name == "cnn" or self.model_name == "attention_cnn":
+            results_folder_path = results_folder_path/f"{self.model_name}_candidate_{self.config.candidate_id}"
+            run_id = f"{self.model_name}_candidate_{self.config.candidate_id}_{self.split_config.split_id}.json"
+        file_path = results_folder_path/run_id
+
+        if file_path.is_file():
+            print(f"Experimental run '{run_id}' already exists and will not be overwritten.")
+            return
+
         train_start = perf_counter()
         if self.model_name in LINEAR_REGISTRY:
             self.model.train(development_data.x_train, development_data.y_train)
@@ -88,7 +99,7 @@ class Model:
                         'runtime_seconds': runtime}
         return self.model, self.metrics
 
-    def save_results(self) -> dict or None:
+    def save_results(self):
         results_folder_path = results_dir/self.model_name
         run_id = f"{self.model_name}_{self.split_config.split_id}.json"
         if self.model_name == "cnn" or self.model_name == "attention_cnn":

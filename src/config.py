@@ -28,7 +28,7 @@ class CNNConfig(TrainingConfig):
     kernel_size: tuple[int, ...] = (29, 29)
     strides: tuple[int, ...] = (1, 1)
     padding: tuple[str, ...] = ('same', 'same')
-    fc_units: tuple[int, ...] = (4,)
+    fc_units: int = 4
 
 
 @dataclass(frozen=True)

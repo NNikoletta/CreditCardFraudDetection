@@ -81,7 +81,7 @@ class CNN(Network):
                              activation=relu)(main_branch)
         main_branch = Flatten()(main_branch)
 
-        main_branch = Dense(self.config.fc_units[0], activation=relu)(main_branch)
+        main_branch = Dense(self.config.fc_units, activation=relu)(main_branch)
         # main_branch = Dense(8, activation=relu)(main_branch)
         sigmoid_out = Dense(1, activation=sigmoid)(main_branch)
 
