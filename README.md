@@ -8,7 +8,7 @@ The project is in its experimental phase the focus of which is the optimization 
 
 ## A little bit about the data
 ### Data Source and Structure
-The dataset contains credit card transactions made in Europe in September 2013. The dataset is extremely imbalanced with 492 fraudulent and 284,315 legitimate transactions (fraudulent transactions amount to ~0.172% of all data). The project aims to create an end-to-end model that automatically downloads, loads and processes the data before completing the classification task at hand which is the detection of fraudulent transactions. This is followed by the evaluation and visualization of the results.
+The [dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) contains credit card transactions made in Europe in September 2013. The dataset is extremely imbalanced with 492 fraudulent and 284,315 legitimate transactions (fraudulent transactions amount to ~0.172% of all data). The project aims to create an end-to-end model that automatically downloads, loads and processes the data before completing the classification task at hand which is the detection of fraudulent transactions. This is followed by the evaluation and visualization of the results.
 
 The dataset is originally stored in a .csv file that consists of 31 attributes:
 - Time - the time elapsed from the first transaction in seconds
@@ -124,7 +124,33 @@ class CNNConfig(TrainingConfig):
 
 The CNN was run with various configurations on all five experimental data splits, and the results were saved for future comparison.
 
+### Decision-trees
+As a comparison to deep learning methods, the project aims to explore decision-tree based models as well.
+
+#### XGBoost
+XGBoost is one of the most powerful algorithms that is widely used for credit card fraud detection. In this project, it is trained on unscaled data and the default parameters are used, which are the following:
+
+```
+@dataclass(frozen=True)
+class XGBoostConfig:
+   learning_rate: float = 0.1
+   n_estimators: int = 100
+   max_depth: int = 3
+   random_state: int = 42
+   gamma: float = 0
+   min_child_weight: float = 1
+   ratio: float = 1
+```
+
+
+## Experiments
+Every run adheres to the [experimental protocol](https://github.com/NNikoletta/CreditCardFraudDetection/blob/main/docs/experimental_protocol.md).
+
 Although the dataset is extremely imbalanced, one can notice that I am not modifying the class weights in any of my models. During my experiments, I ran multiple tests with balanced weights and with the defaults settings as well. After comparing the results, I decided to continue this project with the default weights. The reason behind this is the recall-precision trade-off. While introducing balancing techniques to make up for the imbalance in the data increased the recall quite substantially, the precision dropped which heavily affected the classification. Because the objective of this project is tied to a real-life problem, it is important to maintain the balance between the two metrics. Of course, this type of balance is always crucial, but in this scenario it becomes imperative since both cases - missing fraudulent transactions as well as classifying too many legitimate transactions as fraudulent - may bring forward expenses and inconvenience for both users and the company employing the fraud detection techniques.
+
+## Results
+
+
 
 
 
