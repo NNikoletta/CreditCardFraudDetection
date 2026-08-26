@@ -29,6 +29,7 @@ class CNNConfig(TrainingConfig):
     strides: tuple[int, ...] = (1, 1)
     padding: tuple[str, ...] = ('same', 'same')
     fc_units: int = 4
+    # dropout: float = 0
 
 
 @dataclass(frozen=True)

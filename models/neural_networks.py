@@ -3,7 +3,7 @@ import keras
 from keras.activations import relu, sigmoid
 from keras.models import Model
 from keras.layers import Dense, Input, Reshape
-from keras.layers import Conv1D
+from keras.layers import Conv1D, BatchNormalization
 from keras.layers import Flatten
 from keras.metrics import BinaryAccuracy
 
@@ -76,13 +76,14 @@ class CNN(Network):
         main_branch = Conv1D(self.config.filters[0], kernel_size=self.config.kernel_size[0],
                              strides=self.config.strides[0], padding=self.config.padding[0],
                              activation=relu)(reshaped_main)
+        # main_branch = BatchNormalization()(main_branch)
         main_branch = Conv1D(self.config.filters[1], kernel_size=self.config.kernel_size[1],
                              strides=self.config.strides[1], padding=self.config.padding[1],
                              activation=relu)(main_branch)
+
         main_branch = Flatten()(main_branch)
 
         main_branch = Dense(self.config.fc_units, activation=relu)(main_branch)
-        # main_branch = Dense(8, activation=relu)(main_branch)
         sigmoid_out = Dense(1, activation=sigmoid)(main_branch)
 
         self.model = Model(inputs=input_main, outputs=sigmoid_out)
@@ -107,7 +108,7 @@ class AttentionCNN(Network):
         main_branch = AttributeAttention(kernel_size=2)(main_branch)
         main_branch = Flatten()(main_branch)
 
-        main_branch = Dense(self.config.fc_units[0], activation=relu)(main_branch)
+        main_branch = Dense(self.config.fc_units, activation=relu)(main_branch)
         sigmoid_out = Dense(1, activation=sigmoid)(main_branch)
 
         self.model = Model(inputs=input_main, outputs=sigmoid_out)

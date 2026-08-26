@@ -67,8 +67,9 @@ class Model:
         file_path = results_folder_path/run_id
 
         if file_path.is_file():
-            print(f"Experimental run '{run_id}' already exists and will not be overwritten.")
-            return
+            raise FileExistsError(
+                f"Experimental run '{run_id}' already exists and will not be overwritten."
+            )
 
         train_start = perf_counter()
         if self.model_name in LINEAR_REGISTRY:
@@ -99,7 +100,7 @@ class Model:
                         'runtime_seconds': runtime}
         return self.model, self.metrics
 
-    def save_results(self):
+    def save_results(self) -> dict:
         results_folder_path = results_dir/self.model_name
         run_id = f"{self.model_name}_{self.split_config.split_id}.json"
         if self.model_name == "cnn" or self.model_name == "attention_cnn":
@@ -109,8 +110,9 @@ class Model:
         file_path = results_folder_path/run_id
 
         if file_path.is_file():
-            print(f"Experimental run '{run_id}' already exists and will not be overwritten.")
-            return
+            raise FileExistsError(
+                f"Experimental run '{run_id}' already exists and will not be overwritten."
+            )
 
         results_data = {'run_id': run_id,
                         'model_name': self.model_name,

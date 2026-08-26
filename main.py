@@ -24,7 +24,19 @@ def main() -> None:
         CNNConfig(batch_size=16, candidate_id=5, filters=(4, 8), kernel_size=(29, 29),
                   strides=(1, 1), padding=('same', 'valid'), fc_units=8),
         CNNConfig(batch_size=16, candidate_id=6, filters=(8, 16), kernel_size=(29, 29),
-                  strides=(1, 1), padding=('same', 'valid'), fc_units=8)
+                  strides=(1, 1), padding=('same', 'valid'), fc_units=8),
+        CNNConfig(batch_size=16, candidate_id=7, filters=(2, 4), kernel_size=(29, 29),
+                  strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
+        CNNConfig(batch_size=16, candidate_id=8, filters=(4, 8), kernel_size=(29, 29),
+                  strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
+        CNNConfig(batch_size=16, candidate_id=9, filters=(8, 16), kernel_size=(29, 29),
+                    strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
+        CNNConfig(batch_size=16, candidate_id=10, filters=(8, 16), kernel_size=(29, 29),
+                  strides=(1, 1), padding=('same', 'valid'), fc_units=16, threshold=0.3),
+        CNNConfig(batch_size=16, candidate_id=11, filters=(2, 4), kernel_size=(29, 15),
+                  strides=(1, 14), padding=('same', 'valid'), fc_units=8, threshold=0.3),
+        CNNConfig(batch_size=16, candidate_id=12, filters=(8, 16), kernel_size=(29, 29),
+                  strides=(1, 1), padding=('same', 'valid'), fc_units=16, threshold=0.2)
     ]
 
     for candidate in cnn_candidates:
