@@ -44,7 +44,7 @@ The _Time_ attribute is currently excluded from the data. This feature only repr
 
 To ensure the reproducibility of the experiments, it is crucial to have a set of fixed splits of data. In total, six sets were created by saving the indices of each split: train, validate, and test. I used _scikit-learn’s_ _train_test_split_ method to create the indices, which were then saved in an _.npz_ format along with the split’s metadata in a _.json_ file. The first split was only used for verification of the pipeline, while the following five splits marked as “experiment_split” were used in hyperparameter optimization and testing of the models. It is important to note, that all of the six splits have the same pool for the train-validate sets, while the test set remains unchanged in every split to avoid data leakage. Every train-validate split has a different random seed which is noted in the metadata. The data is split using an 80/10/10 ratio - train/validate/test respectively. To address the imbalance, during the splitting of the datasets, stratification is used on the training and validation sets. To avoid accidentally mixing the data up, when loading the indices and applying them to the _x_ and _y_ arrays, two data types are created: DevelopmentData and TestData. The DevelopmentData contains the _x_train_, _x_validate, _y_train, and _y_validate arrays, while the TestData contains _x_test_ and _y_test_.
 
-### Normalization of the data
+### Standardization of the data
 
 Some tools that are utilized in this project, such as neural networks, tend to benefit from the data being centred around zero, that is why I decided to apply normalization. The _mean_ and _std_ of a few attributes were checked before proceeding with any modifications and the latter metric was varying. To fix this, _scikit-learn's_ _StandardScaler()_ is used after the data is separated into the _train_, _test_, and _validate_. The scaler is only fit on the training data to ensure that there is no data leakage and the performance of the model closely reflects the results it would show in a real life scenario.
 
@@ -122,7 +122,7 @@ class CNNConfig(TrainingConfig):
 
 ```
 
-The CNN was run with various configurations on all five experimental data splits, and the results were saved for future comparison.
+The CNN was run with various configurations on all five experimental data splits on the training and validation data for model selection, and the results were saved for future comparison.
 
 ### Decision-trees
 As a comparison to deep learning methods, the project aims to explore decision-tree based models as well.
