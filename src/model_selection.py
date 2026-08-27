@@ -6,6 +6,7 @@ from models.linear import LogisticRegressionModel
 from models.neural_networks import MLP, CNN, AttentionCNN
 from models.decision_trees import XGBoostModel
 from src.config import LogisticRegressionConfig, TrainingConfig, CNNConfig, XGBoostConfig, SplitConfig, results_dir
+from src.data_types import TestData
 from src.data_pipeline import load_experiment_data
 from src.metrics import calculate_metrics
 from src.visualization import visualize
@@ -53,7 +54,7 @@ class Model:
         return self.model
 
     def run_model(self):
-        experiment_data = load_experiment_data(self.split_config)
+        experiment_data, _ = load_experiment_data(self.split_config)
         if self.model_name in DECISION_TREES_REGISTRY:
             development_data = experiment_data.unscaled_development
         else:
@@ -141,3 +142,63 @@ class Model:
             json.dump(results_data, json_file, indent=2)
 
         return results_data
+
+    def final_evaluation(self):
+        default_split = self.split_config
+        evaluation_data, scaler = load_experiment_data(default_split)
+        test_data = evaluation_data.test_data
+        if self.model_name in DECISION_TREES_REGISTRY:
+            evaluation_data = evaluation_data.unscaled_development
+        else:
+            evaluation_data = evaluation_data.scaled_development
+            test_data = TestData(x_test=scaler.transform(test_data.x_test), y_test=test_data.y_test)
+
+        results_folder_path = results_dir/self.model_name
+        run_id = f"{self.model_name}_{self.split_config.split_id}.json"
+        if self.model_name == "cnn" or self.model_name == "attention_cnn":
+            results_folder_path = results_folder_path/f"{self.model_name}_candidate_{self.config.candidate_id}"
+            run_id = f"{self.model_name}_candidate_{self.config.candidate_id}_{self.split_config.split_id}.json"
+        file_path = results_folder_path/run_id
+
+        if file_path.is_file():
+            raise FileExistsError(
+                f"Experimental run '{run_id}' already exists and will not be overwritten."
+            )
+
+        train_start = perf_counter()
+        if self.model_name in LINEAR_REGISTRY:
+            self.model.train(evaluation_data.x_train, evaluation_data.y_train)
+        else:
+            self.model.train(evaluation_data.x_train, evaluation_data.x_valid,
+                             evaluation_data.y_train, evaluation_data.y_valid)
+        training_seconds = perf_counter() - train_start
+
+        predict_start = perf_counter()
+        predicted_classes, predicted_probabilities = self.model.predict(test_data.x_test)
+        predict_seconds = perf_counter() - predict_start
+
+        if self.model_name in NEURAL_NETWORKS_REGISTRY:
+            basic_metrics = self.model.evaluate(test_data.x_test, test_data.y_test)
+        else:
+            basic_metrics = self.model.evaluate(test_data.y_test, predicted_classes, predicted_probabilities)
+
+        calculated_metrics = calculate_metrics(test_data.y_test, predicted_classes, predicted_probabilities)
+        confusion_matrix = visualize(test_data.y_test, predicted_classes)
+
+        runtime = {'training_time': training_seconds,
+                   'prediction_time': predict_seconds}
+
+        self.metrics = {'basic_metrics': basic_metrics,
+                        'calculated_metrics': calculated_metrics,
+                        'confusion_matrix': confusion_matrix,
+                        'runtime_seconds': runtime}
+        return self.model, self.metrics
+
+
+def final_evaluation(model_name: str, config=None):
+    default_split = SplitConfig()
+    model = Model(model_name, split_config=default_split, config=config)
+    model.create_model()
+    model.final_evaluation()
+    final_results = model.save_results()
+    return model, final_results

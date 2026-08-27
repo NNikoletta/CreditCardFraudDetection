@@ -76,7 +76,6 @@ class CNN(Network):
         main_branch = Conv1D(self.config.filters[0], kernel_size=self.config.kernel_size[0],
                              strides=self.config.strides[0], padding=self.config.padding[0],
                              activation=relu)(reshaped_main)
-        # main_branch = BatchNormalization()(main_branch)
         main_branch = Conv1D(self.config.filters[1], kernel_size=self.config.kernel_size[1],
                              strides=self.config.strides[1], padding=self.config.padding[1],
                              activation=relu)(main_branch)
@@ -102,10 +101,10 @@ class AttentionCNN(Network):
         main_branch = Conv1D(self.config.filters[0], kernel_size=self.config.kernel_size[0],
                              strides=self.config.strides[0], padding=self.config.padding[0],
                              activation=relu)(reshaped_main)
+        main_branch = AttributeAttention(kernel_size=4)(main_branch)
         main_branch = Conv1D(self.config.filters[1], kernel_size=self.config.kernel_size[1],
                              strides=self.config.strides[1], padding=self.config.padding[1],
                              activation=relu)(main_branch)
-        main_branch = AttributeAttention(kernel_size=2)(main_branch)
         main_branch = Flatten()(main_branch)
 
         main_branch = Dense(self.config.fc_units, activation=relu)(main_branch)

@@ -7,7 +7,7 @@ from src.data_types import DevelopmentData, TestData
 def prepare_data(x: np.ndarray, y: np.ndarray,
                  train_indices: np.ndarray,
                  validation_indices: np.ndarray,
-                 test_indices: np.ndarray):  # Preparation of data for processing
+                 test_indices: np.ndarray) -> tuple[DevelopmentData, TestData]: # Preparation of data for processing
 
     development_data = DevelopmentData(x_train=x[train_indices],
                                        y_train=y[train_indices],
@@ -19,7 +19,7 @@ def prepare_data(x: np.ndarray, y: np.ndarray,
     return development_data, test_data
 
 
-def standardize(development_data: DevelopmentData):
+def standardize(development_data: DevelopmentData) -> tuple[DevelopmentData, StandardScaler]:
     scaler = StandardScaler()
     x_train_scaled = scaler.fit_transform(development_data.x_train)
     x_valid_scaled = scaler.transform(development_data.x_valid)
@@ -27,4 +27,4 @@ def standardize(development_data: DevelopmentData):
                                               y_train=development_data.y_train,
                                               x_valid=x_valid_scaled,
                                               y_valid=development_data.y_valid)
-    return scaler, scaled_development_data
+    return scaled_development_data, scaler
