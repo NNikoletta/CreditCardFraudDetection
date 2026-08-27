@@ -182,46 +182,56 @@ The experiments were focused on exploring how the number of extracted filters, k
 The metrics I was focusing my model selection on were recall and precision, as well as the confusion matrices. My goal was to create a model that creates a balance between the first two metrics. The main idea was to ensure that the number of false negatives and false positives is relatively balanced. If we assume that in a real life example the price of a true positive is more than the price of dealing with a false negative, or vice versa, it is better to have for instance two FP and two FN than four of one or the other. This is a very simplified description of the system used for the model selection. While running the experiments, I noticed that the precision is quite high in most of the cases, almost always reaching 0.9, and the recall is always falling behind in the 0.7-0.8 range. To make up for this, I decided to lower the classification threshold, which decreases the precision but in return increases the recall. I continued keeping an eye on the confusion matrices as well to see how the balance between the FP and FN was maintained.
 
 The averaged results of the experimental CNN runs are shown below:
-| Model | Val Loss                 | Val Acc [%]                  | F1                       | Recall                   | Precision                | Avg precision            | ROC-AUC                  |
-| ----- | ------------------------ | ---------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------ | ------------------------ |
-| CNN1  | 0.00297<br>(std 0.00019) | 99.94944%<br>(std 0.00788%) | 0.83986<br>(std 0.02993) | 0.77551<br>(std 0.05772) | 0.9217<br>(std 0.04283)  | 0.83805<br>(std 0.00811) | 0.97574<br>(std 0.0149)  |
-| CNN2  | 0.00302<br>(std 0.00018) | 99.94804%<br>(std 0.00716%)  | 0.83257<br>(std 0.0273)  | 0.7551<br>(std 0.04999)  | 0.93184<br>(std 0.03233) | 0.83483<br>(std 0.00742) | 0.96759<br>(std 0.01665) |
-| CNN3  | 0.00328<br>(std 0.00047) | 99.94804%<br>(std 0.01097%)  | 0.83699<br>(std 0.03423) | 0.77551<br>(std 0.03872) | 0.91092<br>(std 0.04769) | 0.79424<br>(std 0.02721) | 0.96377<br>(std 0.01603) |
-| CNN4  | 0.00298<br>(std 0.00023) | 99.94944%<br>(std 0.01008%)  | 0.84274<br>(std 0.03149) | 0.78776<br>(std 0.03558) | 0.90719<br>(std 0.04125) | 0.83187<br>(std 0.01306) | 0.97968<br>(std 0.01146) |
-| CNN5  | 0.00304<br>(std 0.0003)  | 99.94874%<br>(std 0.00877%)  | 0.83502<br>(std 0.03258) | 0.75918<br>(std 0.05536) | 0.93182<br>(std 0.03227) | 0.83556<br>(std 0.01725) | 0.97802<br>(std 0.0104)  |
-| CNN6  | 0.00318<br>(std 0.00034) | 99.94382%<br>(std 0.01422%)  | 0.81222<br>(std 0.06383) | 0.72653<br>(std 0.10212) | 0.93742<br>(std 0.04138) | 0.83911<br>(std 0.01073) | 0.97808<br>(std 0.0138)  |
-| CNN7  | 0.00297<br>(std 0.00023) | 99.94523%<br>(std 0.00612%)  | 0.83516<br>(std 0.01298) | 0.80408<br>(std 0.02081) | 0.87153<br>(std 0.04799) | 0.83187<br>(std 0.01306) | 0.97968<br>(std 0.01146) |
-| CNN8  | 0.00304<br>(std 0.0003)  | 99.94523%<br>(std 0.01187%)  | 0.82732<br>(std 0.04123) | 0.76735<br>(std 0.05714) | 0.89983<br>(std 0.03442) | 0.83556<br>(std 0.01725) | 0.97802<br>(std 0.0104)  |
-| CNN9  | 0.00318<br>(std 0.00034) | 99.94804%<br>(std 0.00952%)  | 0.83852<br>(std 0.0288)  | 0.78367<br>(std 0.02768) | 0.90224<br>(std 0.03828) | 0.83911<br>(std 0.01073) | 0.97808<br>(std 0.0138)  |
-| CNN10 | 0.00305<br>(std 0.00017) | 99.94804%<br>(std 0.00813%)  | 0.84161<br>(std 0.02114) | 0.8<br>(std 0.01527)     | 0.88922<br>(std 0.04401) | 0.83546<br>(std 0.01572) | 0.97534<br>(std 0.01015) |
-| CNN11 | 0.00295<br>(std 0.00024) | 99.94944%<br>(std 0.01101%)  | 0.84456<br>(std 0.03171) | 0.79592<br>(std 0.02886) | 0.90144<br>(std 0.05393) | 0.84071<br>(std 0.00953) | 0.97012<br>(std 0.00885) |
-| CNN12 | 0.00305<br>(std 0.00017) | 99.94663%<br>(std 0.00899%)  | 0.83876<br>(std 0.02374) | 0.80408<br>(std 0.01633) | 0.87798<br>(std 0.04625) | 0.83546<br>(std 0.01572) | 0.97534<br>(std 0.01015) |
-| CNN13 | 0.00293<br>(std 0.00018) | 99.95295%<br>(std 0.00651%)  | 0.85446<br>(std 0.01608) | 0.8<br>(std 0.01527)     | 0.91918<br>(std 0.04895) | 0.83452<br>(std 0.01016) | 0.97157<br>(std 0.01068) |
-| CNN14 | 0.00305<br>(std 0.00026) | 99.94452%<br>(std 0.00562%)  | 0.82972<br>(std 0.01967) | 0.78776<br>(std 0.04582) | 0.88058<br>(std 0.04024) | 0.83434<br>(std 0.01082) | 0.97675<br>(std 0.011)   |
-| CNN15 | 0.00289<br>(std 0.00011) | 99.94733%<br>(std 0.00942%)  | 0.83767<br>(std 0.03036) | 0.79184<br>(std 0.04162) | 0.89057<br>(std 0.03143) | 0.84233<br>(std 0.00742) | 0.975<br>(std 0.01098)   |
 
+| Model | Val Loss                 | Val Acc [%]                 | F1                       | Recall                   | Precision                | Avg precision            | Roc/AUC                  |
+| ----- | ------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------ | ------------------------ |
+| CNN1  | 0.00297<br>(std 0.00019) | 99.94944%<br>(std 0.00788%) | 0.83986<br>(std 0.02993) | 0.77551<br>(std 0.05772) | 0.9217<br>(std 0.04283)  | 0.83805<br>(std 0.00811) | 0.97574<br>(std 0.0149)  |
+| CNN2  | 0.00302<br>(std 0.00018) | 99.94804%<br>(std 0.00716%) | 0.83257<br>(std 0.0273)  | 0.7551<br>(std 0.04999)  | 0.93184<br>(std 0.03233) | 0.83483<br>(std 0.00742) | 0.96759<br>(std 0.01665) |
+| CNN3  | 0.00328<br>(std 0.00047) | 99.94804%<br>(std 0.01097%) | 0.83699<br>(std 0.03423) | 0.77551<br>(std 0.03872) | 0.91092<br>(std 0.04769) | 0.79424<br>(std 0.02721) | 0.96377<br>(std 0.01603) |
+| CNN4  | 0.00298<br>(std 0.00023) | 99.94944%<br>(std 0.01008%) | 0.84274<br>(std 0.03149) | 0.78776<br>(std 0.03558) | 0.90719<br>(std 0.04125) | 0.83187<br>(std 0.01306) | 0.97968<br>(std 0.01146) |
+| CNN5  | 0.00304<br>(std 0.0003)  | 99.94874%<br>(std 0.00877%) | 0.83502<br>(std 0.03258) | 0.75918<br>(std 0.05536) | 0.93182<br>(std 0.03227) | 0.83556<br>(std 0.01725) | 0.97802<br>(std 0.0104)  |
+| CNN6  | 0.00318<br>(std 0.00034) | 99.94382%<br>(std 0.01422%) | 0.81222<br>(std 0.06383) | 0.72653<br>(std 0.10212) | 0.93742<br>(std 0.04138) | 0.83911<br>(std 0.01073) | 0.97808<br>(std 0.0138)  |
+| CNN7  | 0.00297<br>(std 0.00023) | 99.94523%<br>(std 0.00612%) | 0.83516<br>(std 0.01298) | 0.80408<br>(std 0.02081) | 0.87153<br>(std 0.04799) | 0.83187<br>(std 0.01306) | 0.97968<br>(std 0.01146) |
+| CNN8  | 0.00304<br>(std 0.0003)  | 99.94523%<br>(std 0.01187%) | 0.82732<br>(std 0.04123) | 0.76735<br>(std 0.05714) | 0.89983<br>(std 0.03442) | 0.83556<br>(std 0.01725) | 0.97802<br>(std 0.0104)  |
+| CNN9  | 0.00318<br>(std 0.00034) | 99.94804%<br>(std 0.00952%) | 0.83852<br>(std 0.0288)  | 0.78367<br>(std 0.02768) | 0.90224<br>(std 0.03828) | 0.83911<br>(std 0.01073) | 0.97808<br>(std 0.0138)  |
+| CNN10 | 0.00305<br>(std 0.00017) | 99.94804%<br>(std 0.00813%) | 0.84161<br>(std 0.02114) | 0.8<br>(std 0.01527)     | 0.88922<br>(std 0.04401) | 0.83546<br>(std 0.01572) | 0.97534<br>(std 0.01015) |
+| CNN11 | 0.00295<br>(std 0.00024) | 99.94944%<br>(std 0.01101%) | 0.84456<br>(std 0.03171) | 0.79592<br>(std 0.02886) | 0.90144<br>(std 0.05393) | 0.84071<br>(std 0.00953) | 0.97012<br>(std 0.00885) |
+| CNN12 | 0.00305<br>(std 0.00017) | 99.94663%<br>(std 0.00899%) | 0.83876<br>(std 0.02374) | 0.80408<br>(std 0.01633) | 0.87798<br>(std 0.04625) | 0.83546<br>(std 0.01572) | 0.97534<br>(std 0.01015) |
+| CNN13 | 0.00293<br>(std 0.00018) | 99.95295%<br>(std 0.00651%) | 0.85446<br>(std 0.01608) | 0.8<br>(std 0.01527)     | 0.91918<br>(std 0.04895) | 0.83452<br>(std 0.01016) | 0.97157<br>(std 0.01068) |
+| CNN14 | 0.00305<br>(std 0.00026) | 99.94452%<br>(std 0.00562%) | 0.82972<br>(std 0.01967) | 0.78776<br>(std 0.04582) | 0.88058<br>(std 0.04024) | 0.83434<br>(std 0.01082) | 0.97675<br>(std 0.011)   |
+| CNN15 | 0.00289<br>(std 0.00011) | 99.94733%<br>(std 0.00942%) | 0.83767<br>(std 0.03036) | 0.79184<br>(std 0.04162) | 0.89057<br>(std 0.03143) | 0.84233<br>(std 0.00742) | 0.975<br>(std 0.01098)   |
+| CNN16 | 0.00303<br>(std 0.00034) | 99.9508%<br>(std 0.00736%)  | 0.84625<br>(std 0.02431) | 0.78776<br>(std 0.03316) | 0.91495<br>(std 0.23618) | 0.82969<br>(std 0.02485) | 0.97751<br>(std 0.01238) |
+
+
+After examining all results, CNN13 was chosen as the architecture that would later be used for final testing. The validation results showed a reasonable balance between recall and precision, with recall reaching the 0.8 threshold and the precision remaining relatively high (0.91918).
 
 ## Results
 
-In the previous section, the focus was on choosing a CNN model based on the validation results. As mentioned before the chosen model was candidate number -. In the results chapter of this work, the outputs of the CNN will be compared with the results produced by all models: Logistic Regression, MLP, and XGBoost. These outcomes can be categorized into two groups: results procured during the validation process, and results procured while running the final evaluation using the test data. Let’s first focus on the former group, the results of which can be found below:
-
-Model	Val Loss	Val Acc [%]	F1	Recall	Precision	Avg precision	Roc/AUC
+In the previous section, the focus was on choosing a CNN model based on the validation results. As mentioned before the chosen model was candidate number 13. In the results chapter of this work, the outputs of the CNN will be compared with the results produced by all models: Logistic Regression, MLP, and XGBoost. These outcomes can be categorized into two groups: results procured during the validation process, and results procured while running the final evaluation using the test data. Let’s first focus on the former group, the results of which can be found below:
 
 
-| Model        | Val Loss                 | Val Acc [%]                 | F1                       | Recall                   | Precision                | Avg precision            | Roc/AUC                  |
-| ------------ | ------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------ | ------------------------ |
-| LR           | 0.00405<br>(std 0.00059) | 99.91644%<br>(std 0.0134%)  | 0.71133<br>(std 0.04683) | 0.6<br>(std 0.05259)     | 0.87885<br>(std 0.06714) | 0.75958<br>(std 0.03442) | 0.97407<br>(std 0.01783) |
-| MLP          | 0.00297<br>(std 0.00031) | 99.94452%<br>(std 0.01244%) | 0.8219<br>(std 0.03865)  | 0.74285<br>(std 0.03316) | 0.92059<br>(std 0.05297) | 0.84143<br>(std 0.0138)  | 0.96896<br>(std 0.01134) |
-| CNN          |                          |                             |                          |                          |                          |                          |                          |
-| AttentionCNN |                          |                             |                          |                          |                          |                          |                          |
-| XGBoost      | 0.00263<br>(std 0.00026) | 99.95365%<br>(std 0.00871%) | 0.85158<br>(std 0.02962) | 0.77551<br>(std 0.04654) | 0.94779<br>(std 0.04303) | 0.8449<br>(std 0.01993)  | 0.97924<br>(std 0.01186) |
+| Model   | Val Loss                 | Val Acc [%]                 | F1                       | Recall                   | Precision                | Avg precision            | Roc/AUC                  |
+| ------- | ------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------ | ------------------------ |
+| LR      | 0.00405<br>(std 0.00059) | 99.91644%<br>(std 0.0134%)  | 0.71133<br>(std 0.04683) | 0.6<br>(std 0.05259)     | 0.87885<br>(std 0.06714) | 0.75958<br>(std 0.03442) | 0.97407<br>(std 0.01783) |
+| MLP     | 0.00297<br>(std 0.00031) | 99.94452%<br>(std 0.01244%) | 0.8219<br>(std 0.03865)  | 0.74285<br>(std 0.03316) | 0.92059<br>(std 0.05297) | 0.84143<br>(std 0.0138)  | 0.96896<br>(std 0.01134) |
+| CNN13   | 0.00293<br>(std 0.00018) | 99.95295%<br>(std 0.00651%) | 0.85446<br>(std 0.01608) | 0.8<br>(std 0.01527)     | 0.91918<br>(std 0.04895) | 0.83452<br>(std 0.01016) | 0.97157<br>(std 0.01068) |
+| XGBoost | 0.00263<br>(std 0.00026) | 99.95365%<br>(std 0.00871%) | 0.85158<br>(std 0.02962) | 0.77551<br>(std 0.04654) | 0.94779<br>(std 0.04303) | 0.8449<br>(std 0.01993)  | 0.97924<br>(std 0.01186) |
+
+
+During the final evaluation, the models were trained on the very first created data split (_fixed_split_v1_) and the architectures were tested on the test dataset. The results were recorded and saved. Please see the outcomes below:
+
 
 
 
 Although the dataset is extremely imbalanced, one can notice that I am not modifying the class weights in any of my models. During my experiments, I ran multiple tests with balanced weights and with the default settings as well. After comparing the results, I decided to continue this project with the default weights. The reason behind this is the recall-precision trade-off. While introducing balancing techniques to make up for the imbalance in the data increased the recall quite substantially, the precision dropped which heavily affected the classification. Because the objective of this project is tied to a real-life problem, it is important to maintain the balance between the two metrics. Of course, this type of balance is always crucial, but in this scenario it becomes imperative since both cases - missing fraudulent transactions as well as classifying too many legitimate transactions as fraudulent - may bring forward expenses and inconvenience for both users and the company employing the fraud detection techniques.
 
+One can also notice that there is an AttentionCNN present in the code, along with a results section for this model. This is an experimental architecture that attempts to create an attention layer that would enhance the attributes of interest to make it easier for the model to predict the right classes and focus on the most important data. After further consideration, I have decided to exclude this module from the project with a possibility of exploring it in a continuation of this work.
 
+## Limitations
 
+There are multiple limitations that need to be pointed out. First let’s focus on the limitations of the dataset. The project does not have access to the raw data. The data used in this work has already been processed through PCA which means that there is not a way to determine which attribute is connected to what original feature of the data. During PCA some critical features might have been completely or partially lost making the training process difficult.
 
+The second limitation that needs to be addressed is one emerging from the architecture of the CNN itself. Because it is tailored to this specific PCA transformed dataset, it is a very rigid model. While it has not been investigated yet, it is likely that changing the order of the columns in the original dataset will affect the classification. In addition, the kernels were designed for this specific dataset as well, and would not achieve the same results with a different dataset. While it is possible to adjust the kernels to a different input, with bigger datasets the computational load caused by this would affect the performance negatively. The model is not robust enough.
 
+The third observation is focused on the pipeline itself. While it is an end-to-end architecture, it is not yet able to process online data. The dataset is fully downloaded and split into training, validation, and testing sets, which means that the model is not built to process real-time incoming data.
 
