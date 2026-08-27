@@ -184,7 +184,7 @@ The metrics I was focusing my model selection on were recall and precision, as w
 The averaged results of the experimental CNN runs are shown below:
 | Model | Val Loss                 | Val Acc [%]                  | F1                       | Recall                   | Precision                | Avg precision            | ROC-AUC                  |
 | ----- | ------------------------ | ---------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------ | ------------------------ |
-| CNN1  | 0.00297<br>(std 0.00019) | 99.94944%<br>(std 0.007882%) | 0.83986<br>(std 0.02993) | 0.77551<br>(std 0.05772) | 0.9217<br>(std 0.04283)  | 0.83805<br>(std 0.00811) | 0.97574<br>(std 0.0149)  |
+| CNN1  | 0.00297<br>(std 0.00019) | 99.94944%<br>(std 0.00788%) | 0.83986<br>(std 0.02993) | 0.77551<br>(std 0.05772) | 0.9217<br>(std 0.04283)  | 0.83805<br>(std 0.00811) | 0.97574<br>(std 0.0149)  |
 | CNN2  | 0.00302<br>(std 0.00018) | 99.94804%<br>(std 0.00716%)  | 0.83257<br>(std 0.0273)  | 0.7551<br>(std 0.04999)  | 0.93184<br>(std 0.03233) | 0.83483<br>(std 0.00742) | 0.96759<br>(std 0.01665) |
 | CNN3  | 0.00328<br>(std 0.00047) | 99.94804%<br>(std 0.01097%)  | 0.83699<br>(std 0.03423) | 0.77551<br>(std 0.03872) | 0.91092<br>(std 0.04769) | 0.79424<br>(std 0.02721) | 0.96377<br>(std 0.01603) |
 | CNN4  | 0.00298<br>(std 0.00023) | 99.94944%<br>(std 0.01008%)  | 0.84274<br>(std 0.03149) | 0.78776<br>(std 0.03558) | 0.90719<br>(std 0.04125) | 0.83187<br>(std 0.01306) | 0.97968<br>(std 0.01146) |
@@ -205,7 +205,16 @@ The averaged results of the experimental CNN runs are shown below:
 
 In the previous section, the focus was on choosing a CNN model based on the validation results. As mentioned before the chosen model was candidate number -. In the results chapter of this work, the outputs of the CNN will be compared with the results produced by all models: Logistic Regression, MLP, and XGBoost. These outcomes can be categorized into two groups: results procured during the validation process, and results procured while running the final evaluation using the test data. Let’s first focus on the former group, the results of which can be found below:
 
+Model	Val Loss	Val Acc [%]	F1	Recall	Precision	Avg precision	Roc/AUC
 
+
+| Model        | Val Loss                 | Val Acc [%]                 | F1                       | Recall                   | Precision                | Avg precision            | Roc/AUC                  |
+| ------------ | ------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------ | ------------------------ |
+| LR           | 0.00405<br>(std 0.00059) | 99.91644%<br>(std 0.0134%)  | 0.71133<br>(std 0.04683) | 0.6<br>(std 0.05259)     | 0.87885<br>(std 0.06714) | 0.75958<br>(std 0.03442) | 0.97407<br>(std 0.01783) |
+| MLP          | 0.00297<br>(std 0.00031) | 99.94452%<br>(std 0.01244%) | 0.8219<br>(std 0.03865)  | 0.74285<br>(std 0.03316) | 0.92059<br>(std 0.05297) | 0.84143<br>(std 0.0138)  | 0.96896<br>(std 0.01134) |
+| CNN          |                          |                             |                          |                          |                          |                          |                          |
+| AttentionCNN |                          |                             |                          |                          |                          |                          |                          |
+| XGBoost      | 0.00263<br>(std 0.00026) | 99.95365%<br>(std 0.00871%) | 0.85158<br>(std 0.02962) | 0.77551<br>(std 0.04654) | 0.94779<br>(std 0.04303) | 0.8449<br>(std 0.01993)  | 0.97924<br>(std 0.01186) |
 
 
 
