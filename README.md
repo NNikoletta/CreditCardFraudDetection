@@ -4,7 +4,7 @@ This project focuses on a highly imbalanced credit card fraud detection dataset 
 
 ## Project Status
 
-The project is in its experimental phase the focus of which is the optimization of hyperparameters.
+The project is in its finishing stages with the focus being on the refinement of the code.
 
 ## A little bit about the data
 ### Data Source and Structure
@@ -220,8 +220,20 @@ In the previous section, the focus was on choosing a CNN model based on the vali
 
 During the final evaluation, the models were trained on the very first created data split (_fixed_split_v1_) and the architectures were tested on the test dataset. The results were recorded and saved. Please see the outcomes below:
 
+| Model   | Val Loss | Val Acc [%] | F1      | Recall  | Precision | Avg precision | Roc/AUC |
+| ------- | -------- | ----------- | ------- | ------- | --------- | ------------- | ------- |
+| LR      | 0.00471  | 99.90871%   | 0.69048 | 0.59184 | 0.82857   | 0.70992       | 0.97983 |
+| MLP     | 0.00319  | 99.92978%   | 0.79167 | 0.77551 | 0.80851   | 0.81392       | 0.98498 |
+| CNN13   | 0.00360  | 99.92276%   | 0.77551 | 0.77551 | 0.77551   | 0.78088       | 0.97410 |
+| XGBoost | 0.00306  | 99.94733%   | 0.83871 | 0.79592 | 0.88636   | 0.81309       | 0.98106 |
 
+As we can see, while the Convolutional Neural Network performed quite well during validation, if we focus on the final evaluation, it is clear that overall, its results are inferior to the MLP and XGBoost results. However, the CNN was able to achieve a recall-recision balance, which is its strength.
 
+The ranking of the models is the following: Logistic Regression < CNN < MLP < XGBoost.
+
+This ranking shows that even with a higher kernel size, for this specific dataset, CNN is not able to achieve the same results as an MLP or XGBoost. Deepening or widening the CNN may be a good approach to improve its performance, however, these modifications would inevitably lead to higher number of parameters as well as higher computational requirements which would increase runtime.
+
+** Additional notes:**
 
 Although the dataset is extremely imbalanced, one can notice that I am not modifying the class weights in any of my models. During my experiments, I ran multiple tests with balanced weights and with the default settings as well. After comparing the results, I decided to continue this project with the default weights. The reason behind this is the recall-precision trade-off. While introducing balancing techniques to make up for the imbalance in the data increased the recall quite substantially, the precision dropped which heavily affected the classification. Because the objective of this project is tied to a real-life problem, it is important to maintain the balance between the two metrics. Of course, this type of balance is always crucial, but in this scenario it becomes imperative since both cases - missing fraudulent transactions as well as classifying too many legitimate transactions as fraudulent - may bring forward expenses and inconvenience for both users and the company employing the fraud detection techniques.
 
@@ -234,4 +246,7 @@ There are multiple limitations that need to be pointed out. First let’s focus 
 The second limitation that needs to be addressed is one emerging from the architecture of the CNN itself. Because it is tailored to this specific PCA transformed dataset, it is a very rigid model. While it has not been investigated yet, it is likely that changing the order of the columns in the original dataset will affect the classification. In addition, the kernels were designed for this specific dataset as well, and would not achieve the same results with a different dataset. While it is possible to adjust the kernels to a different input, with bigger datasets the computational load caused by this would affect the performance negatively. The model is not robust enough.
 
 The third observation is focused on the pipeline itself. While it is an end-to-end architecture, it is not yet able to process online data. The dataset is fully downloaded and split into training, validation, and testing sets, which means that the model is not built to process real-time incoming data.
+
+
+
 
