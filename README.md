@@ -178,7 +178,7 @@ CNNConfig(batch_size=16, candidate_id=13, filters=(2, 4), kernel_size=(29, 15),
 CNNConfig(batch_size=16, candidate_id=14, filters=(2, 4), kernel_size=(29, 15),
           strides=(1, 14), padding=('same', 'valid'), fc_units=16, threshold=0.3),
 CNNConfig(batch_size=16, candidate_id=15, filters=(2, 4), kernel_size=(29, 29),
-          strides=(1, 14), padding=('same', 'same'), fc_units=8, threshold=0.3),
+          strides=(1, 1), padding=('same', 'same'), fc_units=8, threshold=0.3),
 CNNConfig(batch_size=16, candidate_id=16, filters=(4, 8), kernel_size=(29, 15),
           strides=(1, 14), padding=('same', 'same'), fc_units=8, threshold=0.3)
 ```
