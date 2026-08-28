@@ -40,13 +40,15 @@ The data is then loaded into two numpy arrays _x_ and _y_. The former contains a
 
 The _Time_ attribute is currently excluded from the data. This feature only represents the time elapsed from the very first transaction in seconds. Because the data source does not indicate what the exact relation is between the time of the experiment and the true time of the day, I am not able to reliably determine if a transaction was made during the day or night. Additionally, the data is not described as data coming from one subject only, which means that I am not able to separate any accounts to follow a shopping pattern where the _Time_ attribute would be valuable. Due to the reasons described above, I have decided to exclude the _Time_ column from this pipeline. Nevertheless, I am open to exploring the possibility of using this data in a future continuation of this project.
 
+It was also found that the data contains identical entries. These observations were collapsed into one representative row before data splitting to prevent repeated feature vectors from appearing across training, validation, and test partitions.
+
 ### Splitting the data
 
-To ensure the reproducibility of the experiments, it is crucial to have a set of fixed splits of data. In total, six sets were created by saving the indices of each split: train, validate, and test. I used _scikit-learn’s_ _train_test_split_ method to create the indices, which were then saved in an _.npz_ format along with the split’s metadata in a _.json_ file. The first split was only used for verification of the pipeline, while the following five splits marked as “experiment_split” were used in hyperparameter optimization and testing of the models. It is important to note, that all of the six splits have the same pool for the train-validate sets, while the test set remains unchanged in every split to avoid data leakage. Every train-validate split has a different random seed which is noted in the metadata. The data is split using an 80/10/10 ratio - train/validate/test respectively. To address the imbalance, during the splitting of the datasets, stratification is used on the training and validation sets. To avoid accidentally mixing the data up, when loading the indices and applying them to the _x_ and _y_ arrays, two data types are created: DevelopmentData and TestData. The DevelopmentData contains the _x_train_, _x_validate, _y_train, and _y_validate arrays, while the TestData contains _x_test_ and _y_test_.
+To ensure the reproducibility of the experiments, it is crucial to have a set of fixed splits of data. In total, six sets were created by saving the indices of each split: train, validate, and test. I used _scikit-learn’s_ _train_test_split_ method to create the indices, which were then saved in an _.npz_ format along with the split’s metadata in a _.json_ file. The first split was used for verification of the pipeline and later for final testing, while the following five splits marked as “experiment_split” were used in hyperparameter optimization and testing of the models. It is important to note, that all of the six splits have the same pool for the train-validate sets, while the test set remains unchanged in every split to avoid data leakage. Every train-validate split has a different random seed which is noted in the metadata. The data is split using an 80/10/10 ratio - train/validate/test respectively. To address the imbalance, during the splitting of the datasets, stratification is used on the training and validation sets. To avoid accidentally mixing the data up, when loading the indices and applying them to the _x_ and _y_ arrays, two data types are created: DevelopmentData and TestData. The DevelopmentData contains the _x_train_, _x_validate, _y_train, and _y_validate arrays, while the TestData contains _x_test_ and _y_test_.
 
 ### Standardization of the data
 
-Some tools that are utilized in this project, such as neural networks, tend to benefit from the data being centred around zero, that is why I decided to apply normalization. The _mean_ and _std_ of a few attributes were checked before proceeding with any modifications and the latter metric was varying. To fix this, _scikit-learn's_ _StandardScaler()_ is used after the data is separated into the _train_, _test_, and _validate_. The scaler is only fit on the training data to ensure that there is no data leakage and the performance of the model closely reflects the results it would show in a real life scenario.
+Some tools that are utilized in this project, such as neural networks, tend to benefit from the data being centred around zero, that is why I decided to apply standardization. The _mean_ and _std_ of a few attributes were checked before proceeding with any modifications and the latter metric was varying. To fix this, _scikit-learn's_ _StandardScaler()_ is used after the data is separated into the _train_, _test_, and _validate_. The scaler is only fit on the training data to ensure that there is no data leakage and the performance of the model closely reflects the results it would show in a real life scenario.
 
 On the other hand, some of the tools, such as XGBoost can simply use the unscaled data. Due to this another dataclass, ExperimentData, was created that is built using the previously mentioned DevelopmentData and TestData classes. It stores an unscaled and scaled version of the development data, as well as the test data. To make sure the fit scaler can later be used, this class also stores the scaler.
 
@@ -148,38 +150,42 @@ Every run adheres to the [experimental protocol](https://github.com/NNikoletta/C
 
 ```
 CNNConfig(batch_size=16, candidate_id=1, filters=(2, 4), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=4),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=4),
 CNNConfig(batch_size=16, candidate_id=2, filters=(4, 8), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=4),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=4),
 CNNConfig(batch_size=16, candidate_id=3, filters=(8, 16), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=4),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=4),
 CNNConfig(batch_size=16, candidate_id=4, filters=(2, 4), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=8),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=8),
 CNNConfig(batch_size=16, candidate_id=5, filters=(4, 8), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=8),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=8),
 CNNConfig(batch_size=16, candidate_id=6, filters=(8, 16), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=8),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=8),
 CNNConfig(batch_size=16, candidate_id=7, filters=(2, 4), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
 CNNConfig(batch_size=16, candidate_id=8, filters=(4, 8), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
 CNNConfig(batch_size=16, candidate_id=9, filters=(8, 16), kernel_size=(29, 29),
-           strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=8, threshold=0.3),
 CNNConfig(batch_size=16, candidate_id=10, filters=(8, 16), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=16, threshold=0.3),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=16, threshold=0.3),
 CNNConfig(batch_size=16, candidate_id=11, filters=(2, 4), kernel_size=(29, 15),
-         strides=(1, 14), padding=('same', 'valid'), fc_units=8, threshold=0.3),
+          strides=(1, 14), padding=('same', 'valid'), fc_units=8, threshold=0.3),
 CNNConfig(batch_size=16, candidate_id=12, filters=(8, 16), kernel_size=(29, 29),
-         strides=(1, 1), padding=('same', 'valid'), fc_units=16, threshold=0.2),
+          strides=(1, 1), padding=('same', 'valid'), fc_units=16, threshold=0.2),
 CNNConfig(batch_size=16, candidate_id=13, filters=(2, 4), kernel_size=(29, 15),
-         strides=(1, 14), padding=('same', 'same'), fc_units=8, threshold=0.3),
-CNNConfig(batch_size=16, candidate_id=13, filters=(2, 4), kernel_size=(29, 15),
-         strides=(1, 14), padding=('same', 'valid'), fc_units=16, threshold=0.3)
+          strides=(1, 14), padding=('same', 'same'), fc_units=8, threshold=0.3),
+CNNConfig(batch_size=16, candidate_id=14, filters=(2, 4), kernel_size=(29, 15),
+          strides=(1, 14), padding=('same', 'valid'), fc_units=16, threshold=0.3),
+CNNConfig(batch_size=16, candidate_id=15, filters=(2, 4), kernel_size=(29, 29),
+          strides=(1, 1), padding=('same', 'same'), fc_units=8, threshold=0.3),
+CNNConfig(batch_size=16, candidate_id=16, filters=(4, 8), kernel_size=(29, 15),
+          strides=(1, 14), padding=('same', 'same'), fc_units=8, threshold=0.3)
 ```
 
 The experiments were focused on exploring how the number of extracted filters, kernel size, stride, padding, and number of fully connected units in the model affect its performance. While experimenting, multiple aspects were kept in mind, including the number of eventual trainable parameters, training time, and the recall-precision tradeoff. As I mentioned before, one can notice that the kernel size remains 29 in most of the candidates to see if any features can be extracted using a kernel that spans the whole frame. This is a purely experimental setup and the limitations it brings will be discussed in a later section of this work. As another experiment, the kernel size was set to 15 in candidates number 11, 13, and 14, which is roughly half of the whole data window. The reason for this was similar to the 29 size window. Because the position of the attributes due to their nature does not imply an immediate connection between them, I found the scientifically safest route to be a larger kernel size. Convolutional neural networks rely on a simple mathematical operation called convolution. This is where the network got its name from. Considering the proposed kernel size, and the type of operation used in the background (convolution), the number of filters is kept intentionally low, ranging from 2 to only 16. This is done to keep the background computations as low as possible, since it is one of the factors that affect the runtime.
 
-The metrics I was focusing my model selection on were recall and precision, as well as the confusion matrices. My goal was to create a model that creates a balance between the first two metrics. The main idea was to ensure that the number of false negatives and false positives is relatively balanced. If we assume that in a real life example the price of a true positive is more than the price of dealing with a false negative, or vice versa, it is better to have for instance two FP and two FN than four of one or the other. This is a very simplified description of the system used for the model selection. While running the experiments, I noticed that the precision is quite high in most of the cases, almost always reaching 0.9, and the recall is always falling behind in the 0.7-0.8 range. To make up for this, I decided to lower the classification threshold, which decreases the precision but in return increases the recall. I continued keeping an eye on the confusion matrices as well to see how the balance between the FP and FN was maintained.
+The metrics I was focusing my model selection on were recall and precision, as well as the confusion matrices. My goal was to create a model that creates a balance between the first two metrics. The main idea was to ensure that the number of false negatives and false positives is relatively balanced. If we assume that in a real life example a true positive is more costly to resolve than a false negative, or vice versa, it is better to have for instance two FP and two FN than four of one or the other. This is a very simplified description of the system used for the model selection. While running the experiments, I noticed that the precision is quite high in most of the cases, almost always reaching 0.9, and the recall is always falling behind in the 0.7-0.8 range. To make up for this, I decided to lower the classification threshold, which decreases the precision but in return increases the recall. I continued keeping an eye on the confusion matrices as well to see how the balance between the FP and FN was maintained.
 
 The averaged results of the experimental CNN runs are shown below:
 
@@ -220,7 +226,7 @@ In the previous section, the focus was on choosing a CNN model based on the vali
 
 During the final evaluation, the models were trained on the very first created data split (_fixed_split_v1_) and the architectures were tested on the test dataset. The results were recorded and saved. Please see the outcomes below:
 
-| Model   | Val Loss | Val Acc [%] | F1      | Recall  | Precision | Avg precision | Roc/AUC |
+| Model   | Test Loss | Test Acc [%] | F1      | Recall  | Precision | Avg precision | Roc/AUC |
 | ------- | -------- | ----------- | ------- | ------- | --------- | ------------- | ------- |
 | LR      | 0.00471  | 99.90871%   | 0.69048 | 0.59184 | 0.82857   | 0.70992       | 0.97983 |
 | MLP     | 0.00319  | 99.92978%   | 0.79167 | 0.77551 | 0.80851   | 0.81392       | 0.98498 |
