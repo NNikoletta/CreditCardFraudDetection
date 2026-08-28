@@ -26,7 +26,10 @@ def download_dataset():
 
 def load_dataset():
     dataframe = pd.read_csv(raw_data_dir/config.raw_data_file)
-    x = dataframe.drop(columns=["Time", "Class"]).to_numpy(dtype=np.float64)
+    dataframe = dataframe.drop(columns=["Time"])
+    dataframe = dataframe.drop_duplicates()
+
+    x = dataframe.drop(columns=["Class"]).to_numpy(dtype=np.float64)
     y = dataframe["Class"].to_numpy(dtype=np.int32)
 
     return x, y
