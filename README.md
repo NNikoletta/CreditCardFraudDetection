@@ -4,7 +4,71 @@ This project focuses on a highly imbalanced credit card fraud detection dataset 
 
 ## Project Status
 
-The project is in its finishing stages with the focus being on the refinement of the code.
+The project is completed.
+
+## Installation and Usage
+
+### Prerequisites
+
+* Python >= 3.9
+* Git
+* A [Kaggle](https://www.kaggle.com/) account with API credentials
+
+### Installation
+
+Clone the repository and enter the project directory:
+
+```bash
+git clone https://github.com/NNikoletta/CreditCardFraudDetection.git
+cd CreditCardFraudDetection
+```
+
+Create a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+Alternatively, on macOS or Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+Install the required packages:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+### Kaggle configuration
+
+Create a `.env` file in the project root containing:
+
+```env
+KAGGLE_USERNAME=your_kaggle_username
+KAGGLE_KEY=your_kaggle_api_key
+KAGGLE_DATASET=mlg-ulb/creditcardfraud
+```
+
+Your Kaggle API credentials can be generated from your Kaggle account settings. Do not commit the `.env` file or expose your API key publicly.
+
+### Running the project
+
+Run the pipeline from the project root:
+
+```bash
+python main.py
+```
+
+The main.py will create the final evaluation data split and save it. It will then load the data and all the evaluated models will be tested on the final evaluation dataset. The results will be saved and also displayed during the run.
 
 ## A little bit about the data
 ### Data Source and Structure
@@ -44,7 +108,7 @@ It was also found that the data contains identical entries. These observations w
 
 ### Splitting the data
 
-To ensure the reproducibility of the experiments, it is crucial to have a set of fixed splits of data. In total, six sets were created by saving the indices of each split: train, validate, and test. I used _scikit-learn’s_ _train_test_split_ method to create the indices, which were then saved in an _.npz_ format along with the split’s metadata in a _.json_ file. The first split was used for verification of the pipeline and later for final testing, while the following five splits marked as “experiment_split” were used in hyperparameter optimization and testing of the models. It is important to note, that all of the six splits have the same pool for the train-validate sets, while the test set remains unchanged in every split to avoid data leakage. Every train-validate split has a different random seed which is noted in the metadata. The data is split using an 80/10/10 ratio - train/validate/test respectively, except the final evaluation data where a 90/10 ratio is applied which corresponds to training/testing respectively. Since the validation is performed on the experimental data, the validation set can be removed during the final testing. This gives the model more entries to learn from which increases the classification accuracy. To address the imbalance, during the splitting of the datasets, stratification is used on the training and validation sets. To avoid accidentally mixing the data up, when loading the indices and applying them to the _x_ and _y_ arrays, two data types are created: DevelopmentData and TestData. The DevelopmentData contains the _x_train_, _x_validate, _y_train, and _y_validate arrays, while the TestData contains _x_test_ and _y_test_.
+To ensure the reproducibility of the experiments, it is crucial to have a set of fixed splits of data. In total, six sets were created by saving the indices of each split: train, validate, and test. I used _scikit-learn’s_ _train_test_split_ method to create the indices, which were then saved in an _.npz_ format along with the split’s metadata in a _.json_ file. The first split was used for verification of the pipeline and later for final testing, while the following five splits marked as “experiment_split” were used in hyperparameter optimization, validation, and model selection. It is important to note, that all of the six splits have the same pool for the train-validate sets, while the test set remains unchanged in every split to avoid data leakage. Every train-validate split has a different random seed which is noted in the metadata. The data is split using an 80/10/10 ratio - train/validate/test respectively, except the final evaluation data where a 90/10 ratio is applied which corresponds to training/testing respectively. Since the validation is performed on the experimental data, the validation set can be removed during the final testing. This gives the model more entries to learn from which may increase the classification accuracy. To address the imbalance, during the splitting of the datasets, stratification is used on the training and validation sets. To avoid accidentally mixing the data up, when loading the indices and applying them to the _x_ and _y_ arrays, two data types are created: DevelopmentData and TestData. The DevelopmentData contains the _x_train_, _x_validate, _y_train, and _y_validate arrays, while the TestData contains _x_test_ and _y_test_.
 
 ### Standardization of the data
 
@@ -184,9 +248,9 @@ CNNConfig(batch_size=16, candidate_id=16, filters=(4, 8), kernel_size=(29, 15),
 CNNConfig(batch_size=16, candidate_id=17, filters=(2, 4, 8), kernel_size=(29, 29, 29),
           strides=(1, 1, 1), padding=('same', 'same', 'valid'), fc_units=8),
 CNNConfig(batch_size=16, candidate_id=18, filters=(2, 4, 8), kernel_size=(29, 15, 15),
-          strides=(1, 1, 14), padding=('same', 'same', 'valid'), fc_units=8, threshold=0.3)
+          strides=(1, 1, 14), padding=('same', 'same', 'valid'), fc_units=8, threshold=0.3),
 CNNConfig(batch_size=16, candidate_id=19, filters=(2, 4, 8), kernel_size=(29, 29, 29),
-          strides=(1, 1, 1), padding=('same', 'same', 'valid'), fc_units=8, threshold=0.4)
+          strides=(1, 1, 1), padding=('same', 'same', 'valid'), fc_units=8, threshold=0.4),
 CNNConfig(batch_size=16, candidate_id=20, filters=(2, 4, 8), kernel_size=(29, 29, 29),
           strides=(1, 1, 1), padding=('same', 'same', 'valid'), fc_units=8, threshold=0.45)
 ```
@@ -218,8 +282,8 @@ The averaged results of the experimental CNN runs are shown below:
 | CNN15 | 0.00405<br>(std 0.00071) | 99.91221%<br>(std 0.04245%) | 0.76723<br>(std 0.07499) | 0.80426<br>(std 0.01592) | 0.74866<br>(std 0.13458) | 0.80972<br>(std 0.03529) | 0.97581<br>(std 0.00801) |
 | CNN16 | 0.00373<br>(std 0.00053) | 99.90568%<br>(std 0.05042%) | 0.75676<br>(std 0.0852)  | 0.80426<br>(std 0.01592) | 0.73261<br>(std 0.14718) | 0.80224<br>(std 0.0236)  | 0.97795<br>(std 0.0103)  |
 | CNN17 | 0.00368<br>(std 0.0003)  | 99.93688%<br>(std 0.0148%)  | 0.81023<br>(std 0.03381)  | 0.78298<br>(std 0.03127) | 0.84508<br>(std 0.0745)  | 0.78904<br>(std 0.06153) | 0.97056<br>(std 0.00815) |
-| CNN18 | 0.00395<br>(std 0.00044) | 99.91874%<br>(std 0.02208%) | 0.77357<br>(std 0.04418) | 0.8<br>(std 0.0217)      | 0.75566<br>(std 0.08903) | 0.79731<br>(std 0.03037) | 0.9717<br>(std 0.008),    |
-| CNN19 | 0.00368<br>(std 0.0003)  | 99.92817%<br>(std 0.01365%) | 0.79208<br>(std 0.02909) | 0.79574<br>(std 0.0217)  | 0.79291<br>(std 0.06865) | 0.78904<br>(std 0.06153) | 0.97056<br>(std 0.00815), |
+| CNN18 | 0.00395<br>(std 0.00044) | 99.91874%<br>(std 0.02208%) | 0.77357<br>(std 0.04418) | 0.8<br>(std 0.0217)      | 0.75566<br>(std 0.08903) | 0.79731<br>(std 0.03037) | 0.9717<br>(std 0.008)    |
+| CNN19 | 0.00368<br>(std 0.0003)  | 99.92817%<br>(std 0.01365%) | 0.79208<br>(std 0.02909) | 0.79574<br>(std 0.0217)  | 0.79291<br>(std 0.06865) | 0.78904<br>(std 0.06153) | 0.97056<br>(std 0.00815) |
 | CNN20 | 0.00368<br>(std 0.0003)  | 99.93035%<br>(std 0.01223%) | 0.79593<br>(std 0.02671) | 0.79149<br>(std 0.02481) | 0.80436<br>(std 0.06228) | 0.78904<br>(std 0.06153) | 0.97056<br>(std 0.00815) |
 
 After examining all results, two models were chosen for final evaluation: CNN17 and CNN19. Candidate 17 shows higher results compared to all the other networks with the precision reaching 0.84508 and the overall accuracy and f1 being above 0.8. The reason CNN19 was also chosen is the balance between recall and precision. While both metrics are under 0.8, they are very close to each other and this was one of the main criteria. It is important to note that CNN17 and CNN19 are in reality the same model with only the threshold parameter being different. Lowering the threshold made the model more balanced. Although the two are the same, they are marked with different ids just to make sure it is easy to reference them. Evaluating them does not require retraining, if the model is trained, and the probabilities are saved, the results can be recreated by simply adjusting the threshold.
