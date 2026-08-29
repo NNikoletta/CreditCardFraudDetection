@@ -10,7 +10,7 @@ The project is completed.
 
 ### Prerequisites
 
-* Python >= 3.9
+* Python 3.12
 * Git
 * A [Kaggle](https://www.kaggle.com/) account with API credentials
 
