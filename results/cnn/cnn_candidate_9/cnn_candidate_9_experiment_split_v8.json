@@ -1,0 +1,58 @@
+{
+  "run_id": "cnn_candidate_9_experiment_split_v8.json",
+  "model_name": "cnn",
+  "split_id": "experiment_split_v8",
+  "split_seed": [
+    27082026,
+    57082027
+  ],
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "model_configuration": {
+    "batch_size": 16,
+    "epochs": 5,
+    "threshold": 0.3,
+    "keras_random_seed": 400,
+    "candidate_id": 9,
+    "filters": [
+      8,
+      16
+    ],
+    "kernel_size": [
+      29,
+      29
+    ],
+    "strides": [
+      1,
+      1
+    ],
+    "padding": [
+      "same",
+      "valid"
+    ],
+    "fc_units": 8
+  },
+  "results": {
+    "loss": 0.008063465356826782,
+    "accuracy": 99.76783990859985,
+    "f1": 0.5492957746478874,
+    "recall": 0.8297872340425532,
+    "precision": 0.4105263157894737,
+    "avg_precision": 0.4975539182509946,
+    "roc_auc": 0.966998855764473
+  },
+  "runtime_seconds": {
+    "training_time": 343.69842059999974,
+    "prediction_time": 2.4007678999987547
+  },
+  "confusion_matrix": [
+    [
+      27464,
+      56
+    ],
+    [
+      8,
+      39
+    ]
+  ]
+}

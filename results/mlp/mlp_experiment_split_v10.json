@@ -1,0 +1,40 @@
+{
+  "run_id": "mlp_experiment_split_v10.json",
+  "model_name": "mlp",
+  "split_id": "experiment_split_v10",
+  "split_seed": [
+    27082026,
+    77082027
+  ],
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "model_configuration": {
+    "batch_size": 16,
+    "epochs": 5,
+    "threshold": 0.5,
+    "keras_random_seed": 400
+  },
+  "results": {
+    "loss": 0.003498953767120838,
+    "accuracy": 99.93107914924622,
+    "f1": 0.7865168539325843,
+    "recall": 0.7446808510638298,
+    "precision": 0.8333333333333334,
+    "avg_precision": 0.811129346220058,
+    "roc_auc": 0.967119464374072
+  },
+  "runtime_seconds": {
+    "training_time": 177.47255669999993,
+    "prediction_time": 1.8173851999999897
+  },
+  "confusion_matrix": [
+    [
+      27513,
+      7
+    ],
+    [
+      12,
+      35
+    ]
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "model_name": "attention_cnn",
+  "model_configuration": {
+    "batch_size": 16,
+    "epochs": 5,
+    "threshold": 0.5,
+    "keras_random_seed": 400,
+    "candidate_id": 17,
+    "filters": [
+      2,
+      4,
+      8
+    ],
+    "kernel_size": [
+      29,
+      29,
+      29
+    ],
+    "strides": [
+      1,
+      1,
+      1
+    ],
+    "padding": [
+      "same",
+      "same",
+      "valid"
+    ],
+    "fc_units": 8
+  },
+  "avg_results": {
+    "loss_avg_std": [
+      0.0037678922060877086,
+      0.00030790018654124757
+    ],
+    "accuracy_avg_std": [
+      99.93397831916809,
+      0.008077370757667846
+    ],
+    "f1_avg_std": [
+      0.8045779080832496,
+      0.020805852757823443
+    ],
+    "recall_avg_std": [
+      0.7957446808510638,
+      0.01702127659574466
+    ],
+    "precision_avg_std": [
+      0.8143848878894258,
+      0.03474835849828191
+    ],
+    "avg_precision_avg_std": [
+      0.801746520824212,
+      0.027766392132974025
+    ],
+    "roc_auc_avg_std": [
+      0.9755878123453737,
+      0.01116390015116496
+    ]
+  },
+  "runtime_seconds_avg": {
+    "training_time_avg_std": [
+      433.96253799999994,
+      51.49981934032583
+    ],
+    "prediction_time_avg_std": [
+      3.6051066200000377,
+      0.9362112644771209
+    ]
+  }
+}

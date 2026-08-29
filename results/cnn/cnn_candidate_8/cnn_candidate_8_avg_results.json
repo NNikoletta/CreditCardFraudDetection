@@ -1,0 +1,67 @@
+{
+  "model_name": "cnn",
+  "model_configuration": {
+    "batch_size": 16,
+    "epochs": 5,
+    "threshold": 0.3,
+    "keras_random_seed": 400,
+    "candidate_id": 8,
+    "filters": [
+      4,
+      8
+    ],
+    "kernel_size": [
+      29,
+      29
+    ],
+    "strides": [
+      1,
+      1
+    ],
+    "padding": [
+      "same",
+      "valid"
+    ],
+    "fc_units": 8
+  },
+  "avg_results": {
+    "loss_avg_std": [
+      0.0037086321506649257,
+      0.0004696835540470557
+    ],
+    "accuracy_avg_std": [
+      99.91584062576294,
+      0.027853604098548434
+    ],
+    "f1_avg_std": [
+      0.7710923177498332,
+      0.0543862362710705
+    ],
+    "recall_avg_std": [
+      0.8085106382978724,
+      0.02691300136313513
+    ],
+    "precision_avg_std": [
+      0.7481212919329867,
+      0.11191286617993972
+    ],
+    "avg_precision_avg_std": [
+      0.8168294018464776,
+      0.016089432829795993
+    ],
+    "roc_auc_avg_std": [
+      0.9684758473527957,
+      0.01621866376327666
+    ]
+  },
+  "runtime_seconds_avg": {
+    "training_time_avg_std": [
+      356.9746217399999,
+      94.02500274711265
+    ],
+    "prediction_time_avg_std": [
+      3.082526879999932,
+      1.224323021118333
+    ]
+  }
+}

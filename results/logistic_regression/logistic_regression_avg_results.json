@@ -1,0 +1,50 @@
+{
+  "model_name": "logistic_regression",
+  "model_configuration": {
+    "random_state": 42,
+    "class_weight": null,
+    "solver": "lbfgs",
+    "penalty": "l2",
+    "max_iter": 100
+  },
+  "avg_results": {
+    "loss_avg_std": [
+      0.004548625483154563,
+      0.00042524139160745494
+    ],
+    "accuracy_avg_std": [
+      99.91439039431205,
+      0.008460771059376758
+    ],
+    "f1_avg_std": [
+      0.7054468881274539,
+      0.03651853636966528
+    ],
+    "recall_avg_std": [
+      0.6042553191489362,
+      0.0496251225093217
+    ],
+    "precision_avg_std": [
+      0.8504219438971761,
+      0.023640951551086448
+    ],
+    "avg_precision_avg_std": [
+      0.7283064756229403,
+      0.021604417967130373
+    ],
+    "roc_auc_avg_std": [
+      0.9746840982187036,
+      0.0037702291317963242
+    ]
+  },
+  "runtime_seconds_avg": {
+    "training_time_avg_std": [
+      0.7660103800000002,
+      0.08199080333536002
+    ],
+    "prediction_time_avg_std": [
+      0.00696298000000084,
+      0.0016985680362018142
+    ]
+  }
+}

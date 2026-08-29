@@ -1,0 +1,62 @@
+{
+  "run_id": "attention_cnn_candidate_17_experiment_split_v7.json",
+  "model_name": "attention_cnn",
+  "split_id": "experiment_split_v7",
+  "split_seed": [
+    27082026,
+    47082027
+  ],
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "model_configuration": {
+    "batch_size": 16,
+    "epochs": 5,
+    "threshold": 0.5,
+    "keras_random_seed": 400,
+    "candidate_id": 17,
+    "filters": [
+      2,
+      4,
+      8
+    ],
+    "kernel_size": [
+      29,
+      29,
+      29
+    ],
+    "strides": [
+      1,
+      1,
+      1
+    ],
+    "padding": [
+      "same",
+      "same",
+      "valid"
+    ],
+    "fc_units": 8
+  },
+  "results": {
+    "loss": 0.0037399879656732082,
+    "accuracy": 99.93470311164856,
+    "f1": 0.8043478260869565,
+    "recall": 0.7872340425531915,
+    "precision": 0.8222222222222222,
+    "avg_precision": 0.8389126562057135,
+    "roc_auc": 0.9901843146956952
+  },
+  "runtime_seconds": {
+    "training_time": 378.00903559999995,
+    "prediction_time": 2.4882466999999906
+  },
+  "confusion_matrix": [
+    [
+      27512,
+      8
+    ],
+    [
+      10,
+      37
+    ]
+  ]
+}

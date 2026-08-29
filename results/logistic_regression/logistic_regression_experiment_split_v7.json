@@ -1,0 +1,41 @@
+{
+  "run_id": "logistic_regression_experiment_split_v7.json",
+  "model_name": "logistic_regression",
+  "split_id": "experiment_split_v7",
+  "split_seed": [
+    27082026,
+    47082027
+  ],
+  "test_fraction": 0.1,
+  "validation_fraction": 0.1,
+  "model_configuration": {
+    "random_state": 42,
+    "class_weight": null,
+    "solver": "lbfgs",
+    "penalty": "l2",
+    "max_iter": 100
+  },
+  "results": {
+    "loss": 0.005029583146100753,
+    "accuracy": 99.92382196104037,
+    "f1": 0.7529411764705882,
+    "recall": 0.6808510638297872,
+    "precision": 0.8421052631578947,
+    "avg_precision": 0.7244426487229209,
+    "roc_auc": 0.979586992825334
+  },
+  "runtime_seconds": {
+    "training_time": 0.7634612999999995,
+    "prediction_time": 0.006490599999999347
+  },
+  "confusion_matrix": [
+    [
+      27514,
+      6
+    ],
+    [
+      15,
+      32
+    ]
+  ]
+}
