@@ -1,7 +1,7 @@
 # Credit Card Fraud Detection: Experimental Protocol
 
 **Protocol version:** - final
-**Status:** Draft - must be finalized before new model selection experiments begin
+**Status:** Final
 **Project:** Credit Card Fraud Detection
 **Repository:** 'NNikoletta/CreditCardFraudDetection'
 
