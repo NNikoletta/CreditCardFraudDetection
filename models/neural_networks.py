@@ -3,7 +3,7 @@ import keras
 from keras.activations import relu, sigmoid
 from keras.models import Model
 from keras.layers import Dense, Input, Reshape
-from keras.layers import Conv1D, BatchNormalization
+from keras.layers import Conv1D
 from keras.layers import Flatten
 from keras.metrics import BinaryAccuracy
 
@@ -77,17 +77,28 @@ class CNN(Network):
 
     def build_model(self):
         input_main = Input(shape=(29,))
-        reshaped_main = Reshape((29, 1))(input_main)
+        main_branch = Reshape((29, 1))(input_main)
 
-        main_branch = Conv1D(self.config.filters[0], kernel_size=self.config.kernel_size[0],
-                             strides=self.config.strides[0], padding=self.config.padding[0],
-                             activation=relu)(reshaped_main)
-        main_branch = Conv1D(self.config.filters[1], kernel_size=self.config.kernel_size[1],
-                             strides=self.config.strides[1], padding=self.config.padding[1],
-                             activation=relu)(main_branch)
-        main_branch = Conv1D(self.config.filters[2], kernel_size=self.config.kernel_size[2],
-                             strides=self.config.strides[2], padding=self.config.padding[2],
-                             activation=relu)(main_branch)
+        params = [self.config.filters,
+                  self.config.kernel_size,
+                  self.config.strides,
+                  self.config.padding]
+
+        all_same = len({len(t) for t in params}) <= 1
+        if all_same is True:
+            layer_params = zip(self.config.filters,
+                               self.config.kernel_size,
+                               self.config.strides,
+                               self.config.padding)
+        else:
+            raise ValueError(
+                "Provided parameters contain inconsistent data."
+            )
+
+        for filters, kernel_size, strides, padding in layer_params:
+            main_branch = Conv1D(filters, kernel_size=kernel_size,
+                                 strides=strides, padding=padding,
+                                 activation=relu)(main_branch)
 
         main_branch = Flatten()(main_branch)
 

@@ -25,7 +25,7 @@ def main() -> None:
                              strides=(1, 1, 1), padding=('same', 'same', 'valid'), fc_units=8, threshold=0.4)
 
     final_evaluation("cnn", final_eval_split=final_eval_split, config=cnn17_config)
-    final_evaluation("cnn", final_eval_split=final_eval_split, config=cnn19_config)
+
 
 
 if __name__ == "__main__":
