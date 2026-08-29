@@ -24,19 +24,25 @@ class XGBoostModel:
                                        scale_pos_weight=self.ratio,
                                        eval_metric=['logloss'])
 
-    def train(self, x_train, x_valid, y_train, y_valid) -> None:
-        self.model.fit(x_train, y_train, eval_set=[(x_valid, y_valid)])
+    def train(self, x_train: np.ndarray, y_train: np.ndarray,
+              x_valid: np.ndarray = None, y_valid: np.ndarray = None) -> None:
+        if x_valid is None or y_valid is None:
+            self.model.fit(x_train, y_train)
+        else:
+            self.model.fit(x_train, y_train, eval_set=[(x_valid, y_valid)])
 
-    def predict(self, x_test) -> tuple[np.ndarray, np.ndarray]:
+    def predict(self, x_test: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         predicted_classes = self.model.predict(x_test)
         predicted_probabilities = self.model.predict_proba(x_test)[:, 1]
         return predicted_classes, predicted_probabilities
 
-    def evaluate(self, y_test, predicted_classes, predicted_probabilities) -> dict[str, float]:
+    def evaluate(self, y_test: np.ndarray,
+                 predicted_classes: np.ndarray,
+                 predicted_probabilities: np.ndarray) -> dict[str, float]:
         acc = accuracy_score(y_test, predicted_classes)
         loss = log_loss(y_test, predicted_probabilities)
-        print('Validation loss: ', round(loss, ndigits=3))
-        print(f'Validation accuracy: {round(acc * 100, ndigits=3)}%')
+        print('Loss: ', round(loss, ndigits=3))
+        print(f'Accuracy: {round(acc * 100, ndigits=3)}%')
         test_metrics = {'loss': loss,
                         'accuracy': acc}
         return test_metrics

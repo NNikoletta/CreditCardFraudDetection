@@ -23,3 +23,11 @@ class ExperimentData:
     scaled_development: DevelopmentData
     test_data: TestData
     scaler: StandardScaler
+
+
+@dataclass(frozen=True)
+class FinalEvaluation:
+    unscaled_train_data: TestData
+    scaled_train_data: TestData
+    test_data: TestData
+    scaler: StandardScaler

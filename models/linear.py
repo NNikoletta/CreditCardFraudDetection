@@ -20,15 +20,16 @@ class LogisticRegressionModel:  # Baseline comparison for neural networks
                                         solver=self.solver, penalty=self.penalty, max_iter=self.max_iter,
                                         verbose=1)
 
-    def train(self, x_train, y_train) -> None:
+    def train(self, x_train: np.ndarray, y_train: np.ndarray) -> None:
         self.model.fit(x_train, y_train)
 
-    def predict(self, x_test) -> tuple[np.ndarray, np.ndarray]:
+    def predict(self, x_test: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         predicted_classes = self.model.predict(x_test)
         predicted_probabilities = self.model.predict_proba(x_test)[:, 1]
         return predicted_classes, predicted_probabilities
 
-    def evaluate(self, y_test, predicted_classes, predicted_probabilities) -> dict[str, float]:
+    def evaluate(self, y_test: np.ndarray, predicted_classes: np.ndarray,
+                 predicted_probabilities: np.ndarray) -> dict[str, float]:
         acc = accuracy_score(y_test, predicted_classes)
         loss = log_loss(y_test, predicted_probabilities)
         print('Loss: ', round(loss, ndigits=3))

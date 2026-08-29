@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 @dataclass(frozen=True)
 class SplitConfig:
     split_id: str = "fixed_split_v2"
-    split_seed: tuple[int, int] = (27082026, 27082027)
+    split_seed: tuple[int, ...] = (27082026, 27082027)
     test_fraction: float = 0.10
     validation_fraction: float = 0.10
 

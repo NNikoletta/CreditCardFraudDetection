@@ -29,20 +29,26 @@ class Network:
             "Subclass must implement its own build_model()."
         )
 
-    def train(self, x_train, x_valid, y_train, y_valid) -> None:
+    def train(self, x_train: np.ndarray, y_train: np.ndarray,
+              x_valid: np.ndarray = None, y_valid: np.ndarray = None) -> None:
         metrics = [BinaryAccuracy(name='accuracy', threshold=self.threshold)]
         self.model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),
                            metrics=metrics)
         self.model.summary()
-        self.model.fit(x_train, y_train, class_weight=self.class_weight, batch_size=self.batch_size,
-                       epochs=self.epochs, verbose=1, validation_data=(x_valid, y_valid))
 
-    def predict(self, x_test) -> tuple[np.ndarray, np.ndarray]:
+        if x_valid is None or y_valid is None:
+            self.model.fit(x_train, y_train, class_weight=self.class_weight, batch_size=self.batch_size,
+                           epochs=self.epochs, verbose=1)
+        else:
+            self.model.fit(x_train, y_train, class_weight=self.class_weight, batch_size=self.batch_size,
+                           epochs=self.epochs, verbose=1, validation_data=(x_valid, y_valid))
+
+    def predict(self, x_test: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         predicted_probabilities = self.model.predict(x_test).ravel()
         predicted_classes = (predicted_probabilities > self.threshold).astype('int')
         return predicted_classes, predicted_probabilities
 
-    def evaluate(self, x_test, y_test) -> dict[str, float]:
+    def evaluate(self, x_test: np.ndarray, y_test: np.ndarray) -> dict[str, float]:
         test_metrics = self.model.evaluate(x_test, y_test, verbose=1, return_dict=True)
         print('Loss: ', round(test_metrics['loss'], ndigits=3))
         print(f'Accuracy: {round(test_metrics["accuracy"]*100, ndigits=3)}%')
@@ -79,6 +85,9 @@ class CNN(Network):
         main_branch = Conv1D(self.config.filters[1], kernel_size=self.config.kernel_size[1],
                              strides=self.config.strides[1], padding=self.config.padding[1],
                              activation=relu)(main_branch)
+        main_branch = Conv1D(self.config.filters[2], kernel_size=self.config.kernel_size[2],
+                             strides=self.config.strides[2], padding=self.config.padding[2],
+                             activation=relu)(main_branch)
 
         main_branch = Flatten()(main_branch)
 
@@ -101,10 +110,14 @@ class AttentionCNN(Network):
         main_branch = Conv1D(self.config.filters[0], kernel_size=self.config.kernel_size[0],
                              strides=self.config.strides[0], padding=self.config.padding[0],
                              activation=relu)(reshaped_main)
-        main_branch = AttributeAttention(kernel_size=4)(main_branch)
         main_branch = Conv1D(self.config.filters[1], kernel_size=self.config.kernel_size[1],
                              strides=self.config.strides[1], padding=self.config.padding[1],
                              activation=relu)(main_branch)
+        main_branch = AttributeAttention(kernel_size=15)(main_branch)
+        main_branch = Conv1D(self.config.filters[2], kernel_size=self.config.kernel_size[2],
+                             strides=self.config.strides[2], padding=self.config.padding[2],
+                             activation=relu)(main_branch)
+
         main_branch = Flatten()(main_branch)
 
         main_branch = Dense(self.config.fc_units, activation=relu)(main_branch)

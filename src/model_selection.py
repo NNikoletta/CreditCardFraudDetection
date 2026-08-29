@@ -7,7 +7,7 @@ from models.neural_networks import MLP, CNN, AttentionCNN
 from models.decision_trees import XGBoostModel
 from src.config import LogisticRegressionConfig, TrainingConfig, CNNConfig, XGBoostConfig, SplitConfig, results_dir
 from src.data_types import TestData
-from src.data_pipeline import load_experiment_data
+from src.data_pipeline import load_experiment_data, load_eval_data
 from src.metrics import calculate_metrics
 from src.visualization import visualize
 from src.utils import ensure_dir
@@ -76,8 +76,8 @@ class Model:
         if self.model_name in LINEAR_REGISTRY:
             self.model.train(development_data.x_train, development_data.y_train)
         else:
-            self.model.train(development_data.x_train, development_data.x_valid,
-                             development_data.y_train, development_data.y_valid)
+            self.model.train(development_data.x_train, development_data.y_train,
+                             development_data.x_valid, development_data.y_valid)
         training_seconds = perf_counter() - train_start
 
         predict_start = perf_counter()
@@ -144,13 +144,13 @@ class Model:
         return results_data
 
     def final_evaluation(self):
-        default_split = self.split_config
-        evaluation_data, scaler = load_experiment_data(default_split)
-        test_data = evaluation_data.test_data
+        final_eval_split = self.split_config
+        final_eval_data, scaler = load_eval_data(final_eval_split)
+        test_data = final_eval_data.test_data
         if self.model_name in DECISION_TREES_REGISTRY:
-            evaluation_data = evaluation_data.unscaled_development
+            train_data = final_eval_data.unscaled_train_data
         else:
-            evaluation_data = evaluation_data.scaled_development
+            train_data = final_eval_data.scaled_train_data
             test_data = TestData(x_test=scaler.transform(test_data.x_test), y_test=test_data.y_test)
 
         results_folder_path = results_dir/self.model_name
@@ -167,10 +167,9 @@ class Model:
 
         train_start = perf_counter()
         if self.model_name in LINEAR_REGISTRY:
-            self.model.train(evaluation_data.x_train, evaluation_data.y_train)
+            self.model.train(train_data.x_test, train_data.y_test)
         else:
-            self.model.train(evaluation_data.x_train, evaluation_data.x_valid,
-                             evaluation_data.y_train, evaluation_data.y_valid)
+            self.model.train(train_data.x_test, train_data.y_test)
         training_seconds = perf_counter() - train_start
 
         predict_start = perf_counter()
@@ -195,9 +194,8 @@ class Model:
         return self.model, self.metrics
 
 
-def final_evaluation(model_name: str, config=None):
-    default_split = SplitConfig()
-    model = Model(model_name, split_config=default_split, config=config)
+def final_evaluation(model_name: str, final_eval_split: SplitConfig, config=None):
+    model = Model(model_name, split_config=final_eval_split, config=config)
     model.create_model()
     model.final_evaluation()
     final_results = model.save_results()
